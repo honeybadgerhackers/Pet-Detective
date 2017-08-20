@@ -8,3 +8,8 @@ body{
     background-color: #008000 !
     color: white;
 }
+
+.bg-lightgray
+{
+    background-color:#e7e7e7;
+}

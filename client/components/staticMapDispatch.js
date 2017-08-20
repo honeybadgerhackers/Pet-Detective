@@ -15,7 +15,7 @@ angular.module('pet-detective')
 
       // set up map
       this.mapOptions = {
-        zoom: 12,
+        zoom: 7,
         center: new google.maps.LatLng(29.945947, -90.070023),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       };
@@ -48,7 +48,7 @@ angular.module('pet-detective')
       scope: {
       },
       restrict: 'E',
-      template: "<div style='height: 418px;width: 625px;right: 50px;' ng-model='ctrl.mymarker' id='map-canvas'></div>",
+      template: "<div style='border: 3px solid #008000;' class='col' ng-model='ctrl.mymarker' id='map-canvas'></div>",
       controller: 'petFormController',
       controllerAs: 'ctrl',
       bindToController: true,

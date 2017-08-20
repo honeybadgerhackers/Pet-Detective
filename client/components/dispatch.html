@@ -2,8 +2,8 @@
     #map-canvas {
         height: 325px;
         width: auto;
-        border: 15px solid gray;
-        border-radius: 10px!
+        /* border: 15px solid gray;
+        border-radius: 10px! */
     }
 
     .active a {
@@ -20,17 +20,30 @@ h2 {
     margin-bottom:0;
     margin-top: 0;
 }
+.openform {
+    margin-top: 5%;
+
+}
+div#addNew {
+    margin-bottom: 1.5%;
+}
+
 </style>
-
-
-<div style="background-color: white; height: 150px;" id="addNew" class="col-md-6">
-    <!--<span style="padding:5%"><search></search></span>-->
-    <div style="padding:2%; margin-left: 15%;">
-    <h1 style="color: black; font-family:Zilla Slab, serif;margin-top: 50px;margin-bottom:75px;margin-left: 75px;">Hey, {{ctrl.profileName}}!</h1>
-        <a data-toggle="collapse" data-target="#demo" style="width: 80%"class="btn btn-lg btn-success" href="#">
-        <i class="fa fa-pencil fa-2x pull-left"></i><span style="font-size: 25px; font-family:Roboto, sans-serif;">Pet Found/Lost?</span></a>
+<!-- margin-top: 50px;margin-bottom:75px;margin-left: 75px; -->
+<div class="container">
+    <div class="row">
+<div style="border: 3px solid #008000;background-color: white;height: 325px" id="addNew" class="col-md-6">
+  
+        <search></search>
+    <!-- <div class="openform"> -->
+    <center><h1 style="padding-top:10%; color: black; font-family:Zilla Slab, serif;">Hey, {{ctrl.profileName}}!</h1></center>
+    <center><a data-toggle="collapse" data-target="#demo" class="openform btn btn-lg btn-success" style="" href="#">
+        <i class="fa fa-pencil fa-2x pull-left"></i><span style="font-size: 25px; font-family:Roboto, sans-serif;">Pet Found/Lost?</span></a><center>
+        
+</div>
+<!-- <div class="col-md-6"></div> -->
+    <div ng-controller="petFormController" class="">
+            <static-map-dispatch></static-map-dispatch>
     </div>
 </div>
-<div ng-controller="petFormController" style="background-color:white; height: 325px;" class="col-md-6">
-        <static-map-dispatch></static-map-dispatch>
 </div>

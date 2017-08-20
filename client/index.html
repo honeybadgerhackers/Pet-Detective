@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-signin-client_id" content="673527265143-l8gvqn8e0qcm4o23nf914sd9hp0tj82c.apps.googleusercontent.com">
-    <title>Pet Detective</title>
-    <link href="styles.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Zilla+Slab" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-client_id" content="673527265143-l8gvqn8e0qcm4o23nf914sd9hp0tj82c.apps.googleusercontent.com">
+  <title>Pet Detective</title>
+  <link href="styles.css" rel="stylesheet">
+  <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Zilla+Slab" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 
-  </head>
-  <nav class="navbar navbar-default">
+</head>
+<nav class="navbar navbar-default">
   <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+        aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">
-          <div style="font-size: 35px; margin-left: 17%; color: green">petdetective</div>
-          <img alt="Brand" style="width: 20%; margin-top: -30px" src="https://www.shareicon.net/data/256x256/2015/10/10/653854_print_512x512.png">
-        </a>
-      </div>
-    </div>
-
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right" style="margin-right: 150px;">
-        <li class="active" style="display: none"><div class="g-signin2" type="submit" data-theme="dark"></div></li>
-        <li><a href="#" onclick="signOut();">Sign out</a></li>
-      </ul>
+      <a class="navbar-brand" href="#">
+        <div style="font-size: 35px; margin-left: 17%; color: green">petdetective</div>
+        <img alt="Brand" style="width: 20%; margin-top: -30px" src="https://www.shareicon.net/data/256x256/2015/10/10/653854_print_512x512.png">
+      </a>
     </div>
   </div>
-  </nav>
 
-  <body style="background-color: #008000;" ng-app="pet-detective">
-    <script>
+  <div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav navbar-right" style="margin-right: 150px;">
+      <li class="active" style="display: none">
+        <div class="g-signin2" type="submit" data-theme="dark"></div>
+      </li>
+      <li><a href="#" onclick="signOut();">Sign out</a></li>
+    </ul>
+  </div>
+  </div>
+</nav>
+
+<body style="background-color: #008000;" ng-app="pet-detective">
+  <script>
     // localStorage token does not equal null
     if (!localStorage.getItem('tokenObj')) {
       window.location.href = "/login.html";
     }
-    </script>
-    <script>
-      // function onSignIn(googleUser) {
-      //   // Useful data for your client-side scripts:
-      //   let profile = googleUser.getBasicProfile();
-      //   // const email = profile.getEmail();
-      //   // localStorage.setItem('userProfile', JSON.stringify(profile));
-      //   // The ID token you need to pass to your backend:
-      //   let idtoken = googleUser.getAuthResponse().id_token;
-      //   $.ajax({
-      //     method: "POST",
-      //     url: "/tokensignin",
-      //     data: { idtoken }
-      //   })
-      //     .done(function( msg ) {
-      //       console.log( "Success: " + msg );
-      //       let tokenObj = {token: msg};
-      //       // This is how to set key value to client localStorage
-      //       localStorage.setItem('tokenObj', JSON.stringify(tokenObj));
-      //       // This is how to get key value from client localStorage
-      //       // let clientToken = localStorage.getItem('tokenObj');
-      //       // console.log(JSON.parse(clientToken));
-      //       window.location.href = "/";
-      //     });
-      // }
-        function signOut() {
-          var auth2 = gapi.auth2.getAuthInstance();
-          auth2.signOut().then(function () {
-            console.log('User signed out.');
-            localStorage.removeItem('tokenObj');
-            window.location.href = "/login.html";
-          });
-        }
-    </script>
-    <div class="container">
-      <!--<h1 style="color: white; display:none">Hello, Pet Detective!</h1>-->
-      <div class="row">
-        <div ng-controller="appController">
-          <div class="col-md-12" ng-controller="dispatchController">
-            <dispatch></dispatch>
-          </div>
-
-          <div class="col" ng-controller="petFormController">
-            <pet-form></pet-form>
-          </div>
-
+  </script>
+  <script>
+    // function onSignIn(googleUser) {
+    //   // Useful data for your client-side scripts:
+    //   let profile = googleUser.getBasicProfile();
+    //   // const email = profile.getEmail();
+    //   // localStorage.setItem('userProfile', JSON.stringify(profile));
+    //   // The ID token you need to pass to your backend:
+    //   let idtoken = googleUser.getAuthResponse().id_token;
+    //   $.ajax({
+    //     method: "POST",
+    //     url: "/tokensignin",
+    //     data: { idtoken }
+    //   })
+    //     .done(function( msg ) {
+    //       console.log( "Success: " + msg );
+    //       let tokenObj = {token: msg};
+    //       // This is how to set key value to client localStorage
+    //       localStorage.setItem('tokenObj', JSON.stringify(tokenObj));
+    //       // This is how to get key value from client localStorage
+    //       // let clientToken = localStorage.getItem('tokenObj');
+    //       // console.log(JSON.parse(clientToken));
+    //       window.location.href = "/";
+    //     });
+    // }
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+        localStorage.removeItem('tokenObj');
+        window.location.href = "/login.html";
+      });
+    }
+  </script>
+  <div class="container">
+    <!--<h1 style="color: white; display:none">Hello, Pet Detective!</h1>-->
+    <div class="row">
+      <div ng-controller="appController">
+        <div class="col-md-12" ng-controller="dispatchController">
+          <dispatch></dispatch>
         </div>
+
+        <div class="col-md-6" ng-controller="petFormController">
+          <pet-form></pet-form>
+        </div>
+
       </div>
     </div>
+  </div>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSPu72h4xfISL-XE_jQCbdw8HqUxGPpp4&libraries=places"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSPu72h4xfISL-XE_jQCbdw8HqUxGPpp4&libraries=places"></script>
 
-    <script src="components/autocomplete.js"></script>
-    <script src="map.config.js"></script>
-    <script src="components/app.js"></script>
-    <script src="components/fetchCoords.js"></script>
-    <script src="components/dispatch.js"></script>
-    <script src="components/staticMapDispatch.js"></script>
-    <script src="components/petForm.js"></script>
-    <script src="components/fetchFormData.js"></script>
+  <script src="components/autocomplete.js"></script>
+  <script src="map.config.js"></script>
+  <script src="components/app.js"></script>
+  <script src="components/fetchCoords.js"></script>
+  <script src="components/dispatch.js"></script>
+  <script src="components/staticMapDispatch.js"></script>
+  <script src="components/petForm.js"></script>
+  <script src="components/fetchFormData.js"></script>
+<br>
+</body>
+<footer class="container-fluid text-center bg-lightgray">
+    
+            <div class="copyrights" style="font-size:16px; margin-top:25px;">
+                <p>Pet Detective © 2017, All Rights Reserved
+                </p>
+            </div>
+    </footer>
+    
 
-  </body>
 </html>
