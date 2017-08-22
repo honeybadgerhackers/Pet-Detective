@@ -15,6 +15,20 @@ const connection = mysql.createConnection({
   password: '',
   database: 'petdetective',
 });
+const pool = mysql.createPool({
+  host: DB,
+  user: 'root',
+  password: '',
+  database: 'petdetective',
+});
+pool.getConnection(function (err, conn) {
+  if (err) {
+    console.error(err);
+  }
+  conn.query('select * from petpost', function (error, results, fields) {
+    if (error) console.error(error);
+  });
+});
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
@@ -113,8 +127,4 @@ app.post('/deletePost', (req, res) => {
     }
   });
 });
-
-setInterval(function () {
-  connection.query('select * from petpost');
-}, 5000);
 
