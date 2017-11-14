@@ -23,7 +23,7 @@ module.exports = {
     "linebreak-style": 0,
     "prefer-arrow-callback": 0,
     "no-param-reassign": 0,
-    "no-console": [0, { "allow": ["warn", "error"] }],
+    "no-console": [2, { "allow": ["warn", "error"] }],
     "comma-dangle": ["error", {
       "arrays": "only-multiline",
       "objects": "always-multiline",
