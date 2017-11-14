@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /*
  * angular-google-places-autocomplete
  *
