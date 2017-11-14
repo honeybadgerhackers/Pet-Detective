@@ -25,7 +25,7 @@ pool.getConnection(function (err, conn) {
   if (err) {
     console.error(err);
   }
-  conn.query('select * from petpost', function (error, results, fields) {
+  conn.query('select * from petpost', function (error /* , results, fields */) {
     if (error) console.error(error);
   });
 });
@@ -53,7 +53,7 @@ const userInfo = {
 };
 
 app.get('/bulletin', (req, res) => {
-  connection.query('select * from petpost', (err, rows, fields) => {
+  connection.query('select * from petpost', (err, rows /* , fields */) => {
     if (err) {
       res.send(err);
     } else {
@@ -63,14 +63,14 @@ app.get('/bulletin', (req, res) => {
 });
 
 app.post('/bulletin', (req, res) => {
-  console.log(req.body, 'in server')
-  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function(err, rows, fields) {
+  console.log(req.body, 'in server');
+  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err, /* rows, fields */) {
     if (err) {
       console.error(err);
     } else {
       console.log('Your post has been submitted');
     }
-  }); 
+  });
   res.sendStatus(201);
 });
 
@@ -99,7 +99,7 @@ app.post('/tokensignin', function (req, res) {
       const payload = login.getPayload();
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
-      console.log(payload, 'payload')
+      console.log(payload, 'payload');
       if (payload) {
         token = jwt.sign(payload, process.env.MY_SECRET);
       }
