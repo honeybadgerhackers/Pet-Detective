@@ -6,7 +6,7 @@ angular.module('pet-detective')
     this.place = '';
     this.formBody = '';
     this.type = null;
-    this.latLong = null;
+    this.latlong = null;
     this.img = null;
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
@@ -73,7 +73,7 @@ angular.module('pet-detective')
           message: formBody,
           date: this.date,
           styles: this.petStyles.multipleSelect,
-          latLong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
+          latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
       })
@@ -108,7 +108,7 @@ angular.module('pet-detective')
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
       this.bulletinData.forEach((obj) => {
-        const cord = obj.latLong.split(',');
+        const cord = obj.latlong.split(',');
         obj.lat = cord[0];
         obj.long = cord[1];
       });
