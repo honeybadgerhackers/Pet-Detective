@@ -2,7 +2,7 @@
 </script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<link rel="stylesheet" href="./style/ng-tags-input.min.css">     
+<link rel="stylesheet" href="./style/ng-tags-input.min.css">
 <link rel="stylesheet" href="./style/ng-tags-input.bootstrap.min.css">
 <style>
   @import url(http://fonts.googleapis.com/css?family=Roboto:400);
@@ -140,138 +140,118 @@
   .custom-prediction-label {
     font-style: italic;
   }
-
 </style>
 
 <div class="container">
   <div class="row">
-
-    <div style="font-family: Roboto, sans-serif;"id="addNew">
-
-        <div id="custom-search-input">
-          <div class="input-group">
-            <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc" />
-            <span class="input-group-btn">
-                  <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm)" class="btn btn-info btn-lg" type="button">
-                    <i class="glyphicon glyphicon-search"></i> 
-                  </button>
-            </span>
+    <div style="font-family: Roboto, sans-serif;" id="addNew">
+      <div id="custom-search-input">
+        <div class="input-group">
+          <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"
+          />
+          <span class="input-group-btn">
+            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm)" class="btn btn-info btn-lg" type="button">
+              <i class="glyphicon glyphicon-search"></i>
+            </button>
+          </span>
         </div>
       </div>
     </div>
   </div>
-
-<div class="row">
+  <div class="row">
     <!-- <div class="col"> -->
-      <div ng-init="ctrl.render()">
-        <div ng-controller="dispatchController">
-          <div style="border: 3px solid #008000;" id="demo" class="collapse form-login">
-            <!--<button style="border-radius: 15px" class="btn btn-info">-->
-
-            <!--<a data-toggle="collapse" data-target="#demo" style="width: 80%"class="btn btn-lg btn-success" href="#">
-        <i class="fa fa-pencil fa-2x pull-left"></i><span style="font-size: 25px">Pet Found/Lost?</span></a>-->
-
-
-
-
-            <form name="myForm">
-              <h4 style="font-family: Zilla Slab">Give Us Some Clues</h4>
-              <label style="color: white" for="lostOrFound" required=""> Choose Lost or Found: </label><br>
-              <select name="lostOrFound" ng-model="ctrl.petState.lostOrFound">
-                      <option ng-model="ctrl.petState.lostOrFound" value="Lost">Lost</option>
-                      <option ng-model="ctrl.petState.lostOrFound" value="Found">Found</option>
-                          <i ng-hide="ctrl.petState.lostOrFound.$error.required">*required</i><br>
-                    </select>
-              <tt style="color: white">{{ctrl.petState.lostOrFound}} Pet</tt>
+    <div ng-init="ctrl.render()">
+      <div ng-controller="dispatchController">
+        <div style="border: 3px solid #008000;" id="demo" class="collapse form-login">
+          <form name="myForm">
+            <h4 style="font-family: Zilla Slab">Give Us Some Clues</h4>
+            <label style="color: white" for="lostOrFound" required=""> Choose Lost or Found: </label>
+            <br>
+            <select name="lostOrFound" ng-model="ctrl.petState.lostOrFound">
+              <option ng-model="ctrl.petState.lostOrFound" value="Lost">Lost</option>
+              <option ng-model="ctrl.petState.lostOrFound" value="Found">Found</option>
+              <i ng-hide="ctrl.petState.lostOrFound.$error.required">*required</i>
               <br>
+            </select>
+            <tt style="color: white">{{ctrl.petState.lostOrFound}} Pet</tt>
+            <br>
+            <br>
+            <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
+            <br>
+            <select name="singleSelect" ng-model="ctrl.data.singleSelect">
+              <option ng-model="ctrl.data.singleSelect" value="Cat">Cat</option>
+              <option ng-model="ctrl.data.singleSelect" value="Dog">Dog</option>
+            </select>
+            <tt style="color: white"> Type of Pet: {{ctrl.data.singleSelect}}</tt>
+            <div class="form-group">
               <br>
-              <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label><br>
-              <select name="singleSelect" ng-model="ctrl.data.singleSelect">
-                      <option ng-model="ctrl.data.singleSelect" value="Cat">Cat</option>
-                      <option ng-model="ctrl.data.singleSelect" value="Dog">Dog</option>
-                    </select>
-              <tt style="color: white">  Type of Pet: {{ctrl.data.singleSelect}}</tt>
-              <div class="form-group">
-                <br>
-                <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
-                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                  <div class="input-group-addon">+</div>
-                  <div>
-                    <input type="text" id="address" required="" g-places-autocomplete ng-model="ctrl.place" id="searchTextField" class="form-control input-large chat-input"
-                      placeholder="Start Typing Address..." />
-                  </div>
+              <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon">+</div>
+                <div>
+                  <input type="text" id="address" required="" g-places-autocomplete ng-model="ctrl.place" id="searchTextField" class="form-control input-large chat-input"
+                    placeholder="Start Typing Address..." />
                 </div>
               </div>
-              <!--<div class="here"></div>-->
-              <div class="form-group">
-                <label style="color: white">Enter Animal Details</label>
-                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                  <div class="input-group-addon">+</div>
-                  <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
+            </div>
+            <!--<div class="here"></div>-->
+            <div class="form-group">
+              <label style="color: white">Enter Animal Details</label>
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon">+</div>
+                <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
                   rows="2" required="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <br>
+              <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon">+</div>
+                <div>
+                  <tags-input ng-model="ctrl.tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) ">
+                    <auto-complete source="ctrl.loadTags()"></auto-complete>
+                  </tags-input>
                 </div>
               </div>
-              
-
-              <div class="form-group">
-                  <br>
-                  <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
-                  <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                    <div class="input-group-addon">+</div>
-                    <div>
-                      <tags-input ng-model="tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) "></tags-input>
-                    </div>
-                  </div>
-                </div>
-              <!-- <div class="select-box">
-                <label style="color: white">Select all that apply</label>
-                <br>
-              </div>     -->
-
-
-
-
-                <div ng-init="imgSrc" ng-model="ctrl.img">{{ctrl.img}}</div>
-                <br>
-                <a href="#" id="upload_widget_opener" style="color:white">Upload a Picture of Your Pet</a>
-                <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-                <script type="text/javascript">
-                  document.getElementById("upload_widget_opener").addEventListener("click", function () {
-                    cloudinary.openUploadWidget({
-                        cloud_name: 'rose8190',
-                        upload_preset: 'ipcueltn'
-                      },
-                      function (error, result) {
-                        console.log(error, result, 'upload info')
-                        window.imgSrc = result[0].secure_url;
-                        img = result[0].secure_url;
-                        console.log(window.imgSrc, 'in petform.html');
-                      });
-                  }, false);
-                </script>
-                <img ng-src={{$window.imgSrc}} />
-                </br>
-                <!--<script>
-                        document.getElementById('address').addEventListener('change', function(){
-                          // date = new Date().toString()
-                          window.date = moment();
-                          console.log(window.date);
-                        });
-                      </script>-->
-                      <br>
-                <div class="wrapper">
-                  <span class="group-btn">     
-                      <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date, ctrl.petStyles)" href="#" style="margin-top: 3%" class="btn btn-primary btn-md">Submit Bulletin<i class="fa fa-sign-in"></i></a>
-                  </span>
-                </div>
-            </form> 
+            </div>
+            <div ng-init="imgSrc" ng-model="ctrl.img">{{ctrl.img}}</div>
+            <br>
+            <a href="#" id="upload_widget_opener" style="color:white">Upload a Picture of Your Pet</a>
+            <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+            <script type="text/javascript">
+              document.getElementById("upload_widget_opener").addEventListener("click", function () {
+                cloudinary.openUploadWidget({
+                    cloud_name: 'rose8190',
+                    upload_preset: 'ipcueltn'
+                  },
+                  function (error, result) {
+                    console.log(error, result, 'upload info')
+                    window.imgSrc = result[0].secure_url;
+                    img = result[0].secure_url;
+                    console.log(window.imgSrc, 'in petform.html');
+                  });
+              }, false);
+            </script>
+            <img ng-src={{$window.imgSrc}} />
+            </br>
+            <br>
+            <div class="wrapper">
+              <span class="group-btn">
+                <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date, ctrl.petStyles)"
+                  href="#" style="margin-top: 3%" class="btn btn-primary btn-md">Submit Bulletin
+                  <i class="fa fa-sign-in"></i>
+                </a>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
-<!-- </div> -->
+  <!-- </div> -->
 
-<!-- <div class="row" >
+  <!-- <div class="row" >
     <div class="col-md-4" ng-repeat-start="item in data">
         I'M A ROW
     </div>
@@ -280,11 +260,11 @@
 </div>
 <div class="row">
  -->
-    <div class="row">
-        <div class="container">
-          <div class="row">
+  <div class="row">
+    <div class="container">
+      <div class="row">
 
-    
+
         <div class="col-lg-6" ng-repeat-start="bulletin in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;"
           ng-click="ctrl.bullClick(bulletin)">
           <div ng-if="bulletin.user === ctrl.email">
@@ -292,37 +272,45 @@
               <span style="top: 3px; right: 3px; position: absolute;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
             </button>
           </div>
-            <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
-            <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a>
-            <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h2>
-            <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)"><b>{{bulletin.type}}</b></h2>
-            
-            
-            <div style="width: 100%; height: 38px;background-color: gray">
-              <h4 style="padding-top: 7px;font-size: 19px"><b>{{bulletin.date}}</b></h4>
-            </div>
-            <div style="" ng-if="bulletin.petPic !== 'undefined'">
-              <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;"
-                ng-click="ctrl.modal(bulletin.petPic)" />
-            </div>
-            <div style="height: 100px">
-            <div style="color:black;font-size: 20px;"><b>Description:</b><span style="font-size: 19px"> {{bulletin.message}}</span></div>
-            <div style="color: black; font-size: 19px;"><b>Features: </b>{{bulletin.styles}}</div>
-            </div>
-            <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;"><b>{{bulletin.lostOrFound}} Near:</b> {{bulletin.address}}</div>
-           
+          <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
+          <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a>
+          <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h2>
+            <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
+              <b>{{bulletin.type}}</b>
+              </h2>
+
+
+              <div style="width: 100%; height: 38px;background-color: gray">
+                <h4 style="padding-top: 7px;font-size: 19px">
+                  <b>{{bulletin.date}}</b>
+                </h4>
+              </div>
+              <div style="" ng-if="bulletin.petPic !== 'undefined'">
+                <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
+              </div>
+              <div style="height: 100px">
+                <div style="color:black;font-size: 20px;">
+                  <b>Description:</b>
+                  <span style="font-size: 19px"> {{bulletin.message}}</span>
+                </div>
+                <div style="color: black; font-size: 19px;">
+                  <b>Features: </b>{{bulletin.styles}}</div>
+              </div>
+              <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;">
+                <b>{{bulletin.lostOrFound}} Near:</b> {{bulletin.address}}</div>
+
         </div>
         <div ng-repeat-end=""></div>
-      </div>  
+      </div>
     </div>
   </div>
 
-    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-body">
-            <img src="" id="imagepreview" style="width: 100%; height: auto">
-          </div>
+  <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <img src="" id="imagepreview" style="width: 100%; height: auto">
         </div>
       </div>
     </div>
+  </div>
