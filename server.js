@@ -72,6 +72,10 @@ app.post('/bulletin', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
+  // To implement a radius search, I need an array of zipcodes within that radius. 
+  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query 
+  // those against each other. 
+  console.log(req.body.searchField);
   connection.query(`select * from petpost where address like '%${req.body.searchField}%' or message like '%${req.body.searchField}%' or type like '%${req.body.searchField}%' or date like'%${req.body.searchField}%' or lostOrFound like '%${req.body.searchField}%'`, function (err, rows) {
     if (err) {
       res.send(err);
