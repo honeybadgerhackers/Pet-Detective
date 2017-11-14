@@ -2,7 +2,7 @@ angular.module('pet-detective')
   .factory('fetchCoordsFactory', function ($http, $q) {
     return {
       fetchCoords() {
-        let prom = $q.defer();
+        const prom = $q.defer();
         $http.get('/bulletin')
           .then(function (data) {
             prom.resolve({
