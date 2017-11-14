@@ -8,6 +8,7 @@ angular.module('pet-detective')
     this.type = null;
     this.latlong = null;
     this.img = null;
+    this.tags = [];
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -56,6 +57,7 @@ angular.module('pet-detective')
     };
 
     this.submit = function (place, formBody /* , img, date , style */) {
+      console.log(this.tags);
       this.date = new Date()
         .toString()
         .split(' ')
@@ -89,7 +91,7 @@ angular.module('pet-detective')
           this.createMap();
         });
     };
-
+    this.loadTags = () => $http.get('./searchTags/petTags.json');
     this.createMap = (lat = 29.945947, long = -90.070023) => {
       this.woa = {
         city: 'PET',
