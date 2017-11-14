@@ -25,7 +25,7 @@ pool.getConnection(function (err, conn) {
   if (err) {
     console.error(err);
   }
-  conn.query('select * from petpost', function (error, results, fields) {
+  conn.query('select * from petpost', function (error /* , results, fields */) {
     if (error) console.error(error);
   });
 });
@@ -38,14 +38,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 connection.connect((err) => {
-  if (!err) {
-    console.log('Database is connected ...');
-  } else {
+  if (err) {
     console.error('Error connecting to database ...', err);
   }
 });
 
-app.listen(PORT, () => console.log('listening on', PORT));
+/* eslint-disable */
+app.listen(PORT, () => console.log('listening on', PORT)); 
+/* eslint-enable */
 
 const userInfo = {
   currentUser: '',
@@ -53,7 +53,7 @@ const userInfo = {
 };
 
 app.get('/bulletin', (req, res) => {
-  connection.query('select * from petpost', (err, rows, fields) => {
+  connection.query('select * from petpost', (err, rows /* , fields */) => {
     if (err) {
       res.send(err);
     } else {
@@ -63,43 +63,35 @@ app.get('/bulletin', (req, res) => {
 });
 
 app.post('/bulletin', (req, res) => {
-  console.log(req.body, 'in server')
-  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function(err, rows, fields) {
+  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err, /* rows, fields */) {
     if (err) {
       console.error(err);
-    } else {
-      console.log('Your post has been submitted');
     }
-  }); 
+  });
   res.sendStatus(201);
 });
 
 app.post('/search', (req, res) => {
-  console.log(req.body, 'should be SEARCH field');
   connection.query(`select * from petpost where address like '%${req.body.searchField}%' or message like '%${req.body.searchField}%' or type like '%${req.body.searchField}%' or date like'%${req.body.searchField}%' or lostOrFound like '%${req.body.searchField}%'`, function (err, rows) {
     if (err) {
       res.send(err);
     } else {
-      console.log(rows, 'in search');
       res.send(rows);
     }
   });
 });
 
 app.post('/tokensignin', function (req, res) {
-  console.log('baby');
   client.verifyIdToken(
     req.body.idtoken,
     '673527265143-l8gvqn8e0qcm4o23nf914sd9hp0tj82c.apps.googleusercontent.com',
     // Or, if multiple clients access the backend:
     // [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
     function (e, login) {
-      console.log('whoa');
       let token;
       const payload = login.getPayload();
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
-      console.log(payload, 'payload')
       if (payload) {
         token = jwt.sign(payload, process.env.MY_SECRET);
       }

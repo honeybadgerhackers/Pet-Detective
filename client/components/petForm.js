@@ -1,17 +1,15 @@
 angular.module('pet-detective')
   .controller('petFormController', function ($http, $window, formDataFactory) {
     this.profileInfo = JSON.parse(localStorage.getItem('userProfile'));
-    console.log(this.profileInfo.ofa);
     this.profileName = this.profileInfo.ofa;
     this.email = localStorage.getItem('userEmail');
     this.place = '';
     this.formBody = '';
-    this.type;
-    this.latlong;
-    this.img;
+    this.type = null;
+    this.latLong = null;
+    this.img = null;
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
-      console.log(this.bulletinData, 'bulletin data');
       this.createMap();
       return this.bulletinData;
     };
@@ -21,14 +19,12 @@ angular.module('pet-detective')
       return $http({
         url: '/search',
         method: 'POST',
-        data: {   
+        data: {
           searchField: search,
         },
       })
         .then((response) => {
-          console.log(response.data, 'data in search factory');
           this.bulletinData = response.data;
-          console.log(this.searchResults, 'in here ');
           this.createMap();
         }, (err) => {
           console.error(err);
@@ -57,11 +53,14 @@ angular.module('pet-detective')
 
     this.petStyles = {
       multipleSelect: [],
-    }
+    };
 
-    this.submit = function (place, formBody, img, date, style) {
-      console.log(this.petStyles.multipleSelect, 'loggin array of object pet styles');
-      this.date = new Date().toString().split(' ').splice(1, 3).join(' ');
+    this.submit = function (place, formBody /* , img, date , style */) {
+      this.date = new Date()
+        .toString()
+        .split(' ')
+        .splice(1, 3)
+        .join(' ');
       $http({
         url: '/bulletin',
         method: 'POST',
@@ -74,17 +73,12 @@ angular.module('pet-detective')
           message: formBody,
           date: this.date,
           styles: this.petStyles.multipleSelect,
-          latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
+          latLong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
       })
-        .then((response) => {
-          console.log(response, 'whats this?');
-          console.log('success');
-          return formDataFactory.fetchFormData();
-        })
+        .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
-          console.log(bulletins, 'bulletins');
           this.bulletinData = bulletins;
           this.data.singleSelect = null;
           this.petState.lostOrFound = null;
@@ -100,9 +94,9 @@ angular.module('pet-detective')
       this.woa = {
         city: 'PET',
       };
-      //set up new marker images
-      let blueMarker = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '0000FF');
-      let redMarker = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'ff0000');
+      // set up new marker images
+      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_constter&chld=%E2%80%A2|0000FF');
+      const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
       // set up map
       this.mapOptions = {
@@ -113,13 +107,13 @@ angular.module('pet-detective')
 
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
-      this.bulletinData.forEach(obj => {
-        let cord = obj.latlong.split(',');
+      this.bulletinData.forEach((obj) => {
+        const cord = obj.latLong.split(',');
         obj.lat = cord[0];
         obj.long = cord[1];
       });
 
-      for (let i = 0; i < this.bulletinData.length; i++) {
+      for (let i = 0; i < this.bulletinData.length; i += 1) {
         this.addMarker = function () {
           this.mymarker = new google.maps.Marker({
             map: this.mymapdetail,
@@ -130,14 +124,14 @@ angular.module('pet-detective')
           });
         };
         this.addMarker();
-        let sco = this;
-        let map = this.mymapdetail;
-        let marker = this.mymarker
-        let img = this.bulletinData[i].petPic;
-        google.maps.event.addListener(sco.mymarker, 'click' ,function() {
-          var infowindow = new google.maps.InfoWindow({
+        const sco = this;
+        const map = this.mymapdetail;
+        const marker = this.mymarker;
+        const img = this.bulletinData[i].petPic;
+        google.maps.event.addListener(sco.mymarker, 'click', () => {
+          const infowindow = new google.maps.InfoWindow({
             content: `<div>${sco.bulletinData[i].message}</div>
-                      <img src=${img} style="width:35px;length:35px"/>`
+                      <img src=${img} style="width:35px;length:35px"/>`,
           });
           if (sco.open) {
             sco.open.close();
@@ -153,19 +147,16 @@ angular.module('pet-detective')
 
     this.deletePost = (bully) => {
       $http.post('/deletePost', bully)
-        .then((response) => {
-          return formDataFactory.fetchFormData();
-        })
+        .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
           this.bulletinData = bulletins;
           this.createMap();
         });
     };
     this.modal = (img) => {
-      console.log('hit')
       $('#imagepreview').attr('src', img); // here asign the image to the modal when the user click the enlarge link
       $('#imagemodal').modal('show');
-    }
+    };
   })
   .directive('petForm', function petFormDirective() {
     return {

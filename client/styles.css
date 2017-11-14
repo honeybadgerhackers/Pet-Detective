@@ -1,11 +1,10 @@
 .navbar-brand {
     position: absolute;
     padding: 20px;
-
 }
 
 body{
-    background-color: #008000 !
+    background-color: #008000 !;
     color: white;
 }
 

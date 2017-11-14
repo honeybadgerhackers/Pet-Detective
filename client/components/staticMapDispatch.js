@@ -9,9 +9,9 @@ angular.module('pet-detective')
         city: 'PET',
       };
 
-      //set up new marker images
-      let blueMarker = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + '0000FF');
-      let redMarker = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'ff0000');
+      // set up new marker images
+      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_constter&chld=%E2%80%A2|0000FF');
+      const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
       // set up map
       this.mapOptions = {
@@ -22,15 +22,14 @@ angular.module('pet-detective')
 
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
-      data.data.forEach(obj => {
-        let cord = obj.latlong.split(',');
+      data.data.forEach((obj) => {
+        const cord = obj.latlong.split(',');
         obj.lat = cord[0];
         obj.long = cord[1];
       });
 
-      for (let i = 0; i < data.data.length; i++) {
+      for (let i = 0; i < data.data.length; i += 1) {
         this.addMarker = function () {
-
           this.mymarker = new google.maps.Marker({
             map: this.mymapdetail,
             animation: google.maps.Animation.DROP,

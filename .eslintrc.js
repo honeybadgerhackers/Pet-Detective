@@ -20,6 +20,7 @@ module.exports = {
   },
   "rules": {
     "func-names": 0,
+    "linebreak-style": 0,
     "prefer-arrow-callback": 0,
     "no-param-reassign": 0,
     "no-console": [2, { "allow": ["warn", "error"] }],
