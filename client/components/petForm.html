@@ -2,6 +2,8 @@
 </script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<link rel="stylesheet" href="./style/ng-tags-input.min.css">     
+<link rel="stylesheet" href="./style/ng-tags-input.bootstrap.min.css">
 <style>
   @import url(http://fonts.googleapis.com/css?family=Roboto:400);
   body {
@@ -206,54 +208,25 @@
                 <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                   <div class="input-group-addon">+</div>
                   <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
-                    rows="2" required="" />
+                  rows="2" required="" />
                 </div>
               </div>
+              
 
-              <div class="select-box">
+              <div class="form-group">
+                  <br>
+                  <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
+                  <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                    <div class="input-group-addon">+</div>
+                    <div>
+                      <tags-input ng-model="tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) "></tags-input>
+                    </div>
+                  </div>
+                </div>
+              <!-- <div class="select-box">
                 <label style="color: white">Select all that apply</label>
                 <br>
-                <select name="multipleSelect" id="multipleSelect" style="width: 200px;" ng-model="ctrl.petStyles.multipleSelect" multiple>
-                        <option value="Size: Small ">
-                          <column>Size:</column>
-                          <column>Small</column>
-                        </option>  
-                        <option value="Size: Medium ">
-                          <column>Size:</column>
-                          <column>Medium</column>
-                        </option>  
-                        <option value="Size : Large ">
-                          <column>Size:</column>
-                          <column>Large</column>
-                        </option>
-                        <option value="White Coat ">
-                          <column>Color of Fur:</column>
-                          <column>White</column>
-                        </option>
-                        <option value="Brown Coat ">
-                          <column>Color of Fur:</column>
-                          <column>Brown</column>
-                        </option>
-                        <option value="Black Coat ">
-                          <column>Color of Fur:</column>
-                          <column>Black</column>
-                        </option>
-                        <option value="Female ">
-                          <column>Sex:</column>
-                          <column>Female</column>
-                        </option>
-                        <option value="Male ">
-                          <column>Sex:</column>
-                          <column>Male</column>
-                        </option>
-                        <option value="Spayed ">
-                          <column>Spayed</column>
-                        </option>
-                        <option value="Neutered ">
-                          <column>Neutered</column>
-                        </option>
-                      </select>
-              </div>    
+              </div>     -->
 
 
 
