@@ -26,9 +26,12 @@ You will need a database called petdetective, created in a mysql session. Once u
 
 `create table petpost (id integer not null auto_increment, lostOrFound varchar(20), type varchar(20) , styles varchar(200), address varchar(140), message varchar(140), date varchar(140), latlong varchar(140), user varchar(75), petPic varchar(220), primary key (id), userpic varchar(220));`
 
-And create a users table with the following:
+Create a users table with the following:
 
 `create table users ( email varchar(75) NOT NULL UNIQUE, picture varchar(220), first_name varchar(25), last_name varchar(25));`
+
+Exit mysql, and run the following command from your terminal. **This process will take some time.**:
+`mysql -u root petdetective < docs/zipcodes.sql`
 
 ## Installing Dependencies
 
