@@ -6,16 +6,12 @@ angular.module('pet-detective')
           url: '/bulletin',
           method: 'GET',
         })
-          .then((response) => {
-            return response.data;
-          },
-          (err) => { // optional
-            console.error(err);
-          });
+          .then(response => response.data,
+            err => console.error(err));
       },
     };
   })
-  .controller('formDataController', function (formDataFactory) {
+  .controller('formDataController', function (/* formDataFactory*/) {
     // this.data = formDataFactory.fetchFormData();
     // console.log(this.data, 'data from form factory');
   })
