@@ -30,8 +30,28 @@ Create a users table with the following:
 
 `create table users ( email varchar(75) NOT NULL UNIQUE, picture varchar(220), first_name varchar(25), last_name varchar(25));`
 
-Exit mysql, and run the following command from your terminal. **This process will take some time.**:
-`mysql -u root petdetective < docs/zipcodes.sql`
+Finally, create a postalcodes table:
+
+```
+create table postalcodes
+(
+  countryCode CHAR(2),
+  postalCode VARCHAR(20),
+  placeName VARCHAR(180),
+  stateName VARCHAR(100),
+  stateCode VARCHAR(20),
+  county VARCHAR(100),
+  countyCode VARCHAR(20),
+  community VARCHAR(100),
+  communityCode VARCHAR(20),
+  lat DECIMAL(6,4),
+  lng DECIMAL(7,4),
+  accuracy TINYINT
+);
+
+LOAD DATA LOCAL
+INFILE './docs/zipcode/US.txt' INTO TABLE postalcodes COLUMNS TERMINATED BY '\t';
+```
 
 ## Installing Dependencies
 
