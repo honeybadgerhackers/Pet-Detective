@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "jsonwebtoken": "^7.4.1",
     "mysql": "^2.13.0",
     "ng-places-autocomplete": "^1.2.1",
+    "nodemon": "^1.12.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   }

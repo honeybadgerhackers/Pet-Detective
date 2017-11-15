@@ -8,6 +8,7 @@ angular.module('pet-detective')
     this.type = null;
     this.latlong = null;
     this.img = null;
+    this.tags = [];
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -50,11 +51,6 @@ angular.module('pet-detective')
       option1: 'Lost',
       option2: 'Found',
     };
-
-    this.petStyles = {
-      multipleSelect: [],
-    };
-
     this.submit = function (place, formBody /* , img, date , style */) {
       this.date = new Date()
         .toString()
@@ -72,7 +68,7 @@ angular.module('pet-detective')
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
-          styles: this.petStyles.multipleSelect,
+          styles: this.tags.map(tag => ` ${tag.text}`),
           latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
@@ -84,12 +80,12 @@ angular.module('pet-detective')
           this.petState.lostOrFound = null;
           this.formBody = null;
           this.address = null;
+          this.tags = [];
           this.img = null;
-          this.styles = null;
           this.createMap();
         });
     };
-
+    this.loadTags = () => $http.get('./searchTags/petTags.json');
     this.createMap = (lat = 29.945947, long = -90.070023) => {
       this.woa = {
         city: 'PET',
