@@ -22,20 +22,28 @@ angular.module('pet-detective')
 
 
     this.fetchSearchResults = function (search, distance) {
-      console.log(distance);
-      return $http({
-        url: '/search',
-        method: 'POST',
-        data: {
-          searchField: search,
-        },
-      })
-        .then((response) => {
-          this.bulletinData = response.data;
-          this.createMap();
-        }, (err) => {
-          console.error(err);
-        });
+      if (search) {
+        return $http({
+          url: '/search',
+          method: 'POST',
+          data: {
+            searchField: search,
+            distance,
+          },
+        })
+          .then(({ data }) => {
+            if (data.length) {
+              this.bulletinData = data;
+              this.createMap();
+            } else {
+              // Display 'No results!' on page, change nothing
+            }
+            this.searchTerm = '';
+            this.searchDistance = this.selectDistance[0];
+          }, (err) => {
+            console.error(err);
+          });
+      }
     };
 
     this.render = async function () {
