@@ -52,7 +52,6 @@ angular.module('pet-detective')
       option2: 'Found',
     };
     this.submit = function (place, formBody /* , img, date , style */) {
-      console.log(this.tags.map(tag => tag.text))
       this.date = new Date()
         .toString()
         .split(' ')
@@ -69,7 +68,7 @@ angular.module('pet-detective')
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
-          styles: this.tags.map(tag => tag.text),
+          styles: this.tags.map(tag => ` ${tag.text}`),
           latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
