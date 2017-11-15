@@ -8,6 +8,30 @@ const utilities = require('./utils/searchUtils');
 
 const app = express();
 const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY } = process.env;
+const nodemailer = require('nodemailer');
+
+const emailUser = process.env.EMAIL_USER;
+const emailPass = process.env.EMAIL_PASS;
+
+const poolConfig = {
+  // pool: true,
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // use TLS
+  auth: {
+    user: `${emailUser}`,
+    pass: `${emailPass}`,
+  },
+};
+
+const transporter = nodemailer.createTransport(poolConfig);
+transporter.verify((err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.info('SMTP CONNECTED');
+  }
+});
 
 const config = {
   host: DB,
@@ -41,6 +65,23 @@ const userInfo = {
   photo: '',
 };
 
+app.post('/message', (req, res) => {
+
+// THROTTLE CONNECTION TOWARDS SPECIFIC USERS
+
+// const targetEmail 
+
+  // const message = {
+//   from: `${emailUser}`,
+//   to: targetEmail,
+//   subject: 'New Message on Pet-Detective',
+//   text: `You have a new message on your post on Pet-Detective`, // can add the message or the related post
+//   html: `<p>You have a new message on your post on Pet-Detective</p>', // add unsubscribe button
+// };
+
+// transporter.sendMail(message);
+
+});
 
 app.get('/bulletin', (req, res) => {
   connection.query('select * from petpost', (err, posts) => {
