@@ -90,6 +90,9 @@ app.post('/search', (req, res) => {
 });
 
 app.post('/tokensignin', function (req, res) {
+  
+  console.log("AM I WORKING?");
+
   client.verifyIdToken(
     req.body.idtoken,
     process.env.OAUTH_ID,
