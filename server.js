@@ -72,13 +72,21 @@ app.post('/bulletin', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  connection.query(`select * from petpost where address like '%${req.body.searchField}%' or message like '%${req.body.searchField}%' or type like '%${req.body.searchField}%' or date like'%${req.body.searchField}%' or lostOrFound like '%${req.body.searchField}%'`, function (err, rows) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(rows);
-    }
-  });
+  connection.query(
+    `select * from petpost where 
+    address like '%${req.body.searchField}%'
+    or message like '%${req.body.searchField}%'
+    or styles like '%${req.body.searchField}%'
+    or type like '%${req.body.searchField}%'
+    or date like'%${req.body.searchField}%'
+    or lostOrFound like '%${req.body.searchField}%'`,
+    (err, rows) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(rows);
+      }
+    });
 });
 
 app.post('/tokensignin', function (req, res) {
