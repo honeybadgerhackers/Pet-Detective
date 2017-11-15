@@ -71,17 +71,25 @@ app.post('/bulletin', (req, res) => {
   res.sendStatus(201);
 });
 
-app.post('/search', (req, res) => {
-  // To implement a radius search, I need an array of zipcodes within that radius. 
-  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query 
-  // those against each other. 
-  console.log(req.body.searchField);
+app.post('/searchDONTDELETE', (req, res) => {
   connection.query(`select * from petpost where address like '%${req.body.searchField}%' or message like '%${req.body.searchField}%' or type like '%${req.body.searchField}%' or date like'%${req.body.searchField}%' or lostOrFound like '%${req.body.searchField}%'`, function (err, rows) {
     if (err) {
       res.send(err);
     } else {
       res.send(rows);
     }
+  });
+});
+
+app.post('/search', (req, res) => {
+  // To implement a radius search, I need an array of zipcodes within that radius. 
+  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query 
+  // those against each other. 
+  const [lat, lng] = req.body.searchField.split(',');
+  // console.log(lat, lng);
+  connection.query(`SELECT zipcode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM zipcodes HAVING distance < 25 ORDER BY distance LIMIT 0 , 20;`, (err, rows) => {
+    console.log(err, rows);
+    res.send(rows);
   });
 });
 
