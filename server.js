@@ -4,28 +4,26 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
+const utilities = require('./utils/searchUtils');
 
 const app = express();
 const PORT = process.env.PORT;
-const DB = process.env.DB;
+const config = {
+  host: process.env.DB,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: 'petdetective',
+};
 
-const connection = mysql.createConnection({
-  host: DB,
-  user: 'root',
-  password: '',
-  database: 'petdetective',
-});
-const pool = mysql.createPool({
-  host: DB,
-  user: 'root',
-  password: '',
-  database: 'petdetective',
-});
-pool.getConnection(function (err, conn) {
+const connection = mysql.createConnection(config);
+
+const pool = mysql.createPool(config);
+
+pool.getConnection(function (err) {
   if (err) {
     console.error(err);
   }
-  conn.query('select * from petpost', function (error /* , results, fields */) {
+  connection.query('select * from petpost', function (error /* , results, fields */) {
     if (error) console.error(error);
   });
 });
@@ -71,18 +69,7 @@ app.post('/bulletin', (req, res) => {
   res.sendStatus(201);
 });
 
-const nearbyZips = (lat, lng, dist, callback) => {
-  connection.query(`SELECT postalCode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM postalcodes HAVING (distance < ${dist}) ORDER BY distance;`, (err, rows) => {
-    const zips = rows.map(row => row.postalCode);
-    const zipString = zips.join("%' OR address LIKE '%");
-    callback(zipString);
-  });
-}
-
 app.post('/search', (req, res) => {
-  // To implement a radius search, I need an array of zipcodes within that radius.
-  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query
-  // those against each other.
   const searchText = req.body.searchField;
   if (isNaN(searchText)) {
     connection.query(
@@ -102,27 +89,23 @@ app.post('/search', (req, res) => {
       });
   } else {
     connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
-      const [{ lat, lng }] = postalCode;
-      nearbyZips(lat, lng, 3, (postalCodes) => {
-        // console.log(`SELECT * FROM petpost WHERE address like '%${postalCodes}%'`);
-        connection.query(
-          `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (err, rows) => {
-            console.log(err, rows);
-            if (err) {
-              res.send(err);
-            } else {
-              res.send(rows);
-            }
-          });
-      });
+      if (err) {
+        res.send(err);
+      } else {
+        const [{ lat, lng }] = postalCode;
+        utilities.nearbyZips(lat, lng, 3, (postalCodes) => {
+          connection.query(
+            `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
+              if (error) {
+                res.send(error);
+              } else {
+                res.send(rows);
+              }
+            });
+        }, connection);
+      }
     });
   }
-  // const [lat, lng] = req.body.searchField.split(',');
-  // console.log(lat, lng);
-  // connection.query(`SELECT zipcode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM zipcodes HAVING distance < 25 ORDER BY distance LIMIT 0 , 20;`, (err, rows) => {
-  //   console.log(err, rows);
-  //   res.send(rows);
-  // });
 });
 
 app.post('/tokensignin', function (req, res) {
