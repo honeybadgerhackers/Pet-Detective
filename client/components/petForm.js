@@ -9,8 +9,9 @@ angular.module('pet-detective')
     this.latlong = null;
     this.img = null;
     this.tags = [];
-    this.species = '';
+    this.selectedSpecies = '';
     this.lostStatus = '';
+    this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish'];
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -52,7 +53,7 @@ angular.module('pet-detective')
           user: this.email,
           userpic: this.profileInfo.Paa,
           lostOrFound: this.lostStatus,
-          type: this.species,
+          type: this.selectedSpecies,
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
@@ -64,7 +65,7 @@ angular.module('pet-detective')
         .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
           this.bulletinData = bulletins;
-          this.species = null;
+          this.selectedSpecies = null;
           this.lostStatus = null;
           this.formBody = null;
           this.address = null;

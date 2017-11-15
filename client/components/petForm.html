@@ -178,11 +178,10 @@
             <br>
             <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
             <br>
-            <select name="singleSelect" ng-model="ctrl.species">
-              <option value="Cat">Cat</option>
-              <option value="Dog">Dog</option>
+            <select name="singleSelect" ng-model="ctrl.selectedSpecies">
+              <option ng-repeat="type in ctrl.speciesList" value="{{type}}">{{type}}</option>
             </select>
-            <tt style="color: white"> Type of Pet: {{ctrl.species}}</tt>
+            <tt style="color: white"> Type of Pet: {{ctrl.selectedSpecies}}</tt>
             <div class="form-group">
               <br>
               <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
