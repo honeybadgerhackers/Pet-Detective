@@ -167,22 +167,22 @@
             <h4 style="font-family: Zilla Slab">Give Us Some Clues</h4>
             <label style="color: white" for="lostOrFound" required=""> Choose Lost or Found: </label>
             <br>
-            <select name="lostOrFound" ng-model="ctrl.petState.lostOrFound">
-              <option ng-model="ctrl.petState.lostOrFound" value="Lost">Lost</option>
-              <option ng-model="ctrl.petState.lostOrFound" value="Found">Found</option>
-              <i ng-hide="ctrl.petState.lostOrFound.$error.required">*required</i>
+            <select name="lostOrFound" ng-model="ctrl.lostStatus">
+              <option value="Lost">Lost</option>
+              <option value="Found">Found</option>
+              <i ng-hide="ctrl.lostStatus.$error.required">*required</i>
               <br>
             </select>
-            <tt style="color: white">{{ctrl.petState.lostOrFound}} Pet</tt>
+            <tt style="color: white">{{ctrl.lostStatus}} Pet</tt>
             <br>
             <br>
             <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
             <br>
-            <select name="singleSelect" ng-model="ctrl.data.singleSelect">
-              <option ng-model="ctrl.data.singleSelect" value="Cat">Cat</option>
-              <option ng-model="ctrl.data.singleSelect" value="Dog">Dog</option>
+            <select name="singleSelect" ng-model="ctrl.species">
+              <option value="Cat">Cat</option>
+              <option value="Dog">Dog</option>
             </select>
-            <tt style="color: white"> Type of Pet: {{ctrl.data.singleSelect}}</tt>
+            <tt style="color: white"> Type of Pet: {{ctrl.species}}</tt>
             <div class="form-group">
               <br>
               <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
@@ -260,7 +260,7 @@
             </button>
           </div>
           <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
-          <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a>
+          <!-- <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a> -->
           <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h2>
             <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
               <b>{{bulletin.type}}</b>
