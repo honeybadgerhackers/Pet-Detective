@@ -9,6 +9,7 @@ angular.module('pet-detective')
     this.latlong = null;
     this.img = null;
     this.tags = [];
+    this.selectDistance = ['none', 2, 5, 10, 25, 50];
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -16,7 +17,8 @@ angular.module('pet-detective')
     };
 
 
-    this.fetchSearchResults = function (search) {
+    this.fetchSearchResults = function (search, distance) {
+      console.log(distance);
       return $http({
         url: '/search',
         method: 'POST',
