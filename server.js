@@ -7,18 +7,17 @@ const GoogleAuth = require('google-auth-library');
 
 const app = express();
 const PORT = process.env.PORT;
-const DB = process.env.DB;
 
 const connection = mysql.createConnection({
-  host: DB,
-  user: 'root',
-  password: '',
+  host: process.env.DB,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: 'petdetective',
 });
 const pool = mysql.createPool({
-  host: DB,
-  user: 'root',
-  password: '',
+  host: process.env.DB,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: 'petdetective',
 });
 pool.getConnection(function (err, conn) {
@@ -31,7 +30,7 @@ pool.getConnection(function (err, conn) {
 });
 
 const auth = new GoogleAuth();
-const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
+const client = new auth.OAuth2(process.env.OAUTH_ID, '', '');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -63,7 +62,7 @@ app.get('/bulletin', (req, res) => {
 });
 
 app.post('/bulletin', (req, res) => {
-  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err, /* rows, fields */) {
+  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err) {
     if (err) {
       console.error(err);
     }
