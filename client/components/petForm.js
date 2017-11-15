@@ -51,12 +51,8 @@ angular.module('pet-detective')
       option1: 'Lost',
       option2: 'Found',
     };
-
-    this.petStyles = {
-      multipleSelect: [],
-    };
-
     this.submit = function (place, formBody /* , img, date , style */) {
+      console.log(this.tags.map(tag => tag.text))
       this.date = new Date()
         .toString()
         .split(' ')
@@ -73,8 +69,7 @@ angular.module('pet-detective')
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
-          tags: this.tags.map(tag => tag.text),
-          styles: this.petStyles.multipleSelect,
+          styles: this.tags.map(tag => tag.text),
           latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
@@ -88,7 +83,6 @@ angular.module('pet-detective')
           this.address = null;
           this.tags = [];
           this.img = null;
-          this.styles = null;
           this.createMap();
         });
     };

@@ -238,7 +238,7 @@
             <br>
             <div class="wrapper">
               <span class="group-btn">
-                <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date, ctrl.petStyles)"
+                <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date)"
                   href="#" style="margin-top: 3%" class="btn btn-primary btn-md">Submit Bulletin
                   <i class="fa fa-sign-in"></i>
                 </a>
@@ -249,22 +249,9 @@
       </div>
     </div>
   </div>
-  <!-- </div> -->
-
-  <!-- <div class="row" >
-    <div class="col-md-4" ng-repeat-start="item in data">
-        I'M A ROW
-    </div>
-    <div class="clearfix" ng-if="($index+1)%3==0"></div>
-    <div ng-repeat-end=""></div>
-</div>
-<div class="row">
- -->
   <div class="row">
     <div class="container">
       <div class="row">
-
-
         <div class="col-lg-6" ng-repeat-start="bulletin in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;"
           ng-click="ctrl.bullClick(bulletin)">
           <div ng-if="bulletin.user === ctrl.email">
@@ -278,8 +265,6 @@
             <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
               <b>{{bulletin.type}}</b>
               </h2>
-
-
               <div style="width: 100%; height: 38px;background-color: gray">
                 <h4 style="padding-top: 7px;font-size: 19px">
                   <b>{{bulletin.date}}</b>
@@ -298,13 +283,11 @@
               </div>
               <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;">
                 <b>{{bulletin.lostOrFound}} Near:</b> {{bulletin.address}}</div>
-
         </div>
         <div ng-repeat-end=""></div>
       </div>
     </div>
   </div>
-
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
