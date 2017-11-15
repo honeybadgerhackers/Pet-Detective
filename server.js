@@ -24,7 +24,7 @@ pool.getConnection(function (err, conn) {
   if (err) {
     console.error(err);
   }
-  conn.query('select * from petpost', function (error /* , results, fields */) {
+  connection.query('select * from petpost', function (error /* , results, fields */) {
     if (error) console.error(error);
   });
 });
@@ -92,7 +92,7 @@ app.post('/search', (req, res) => {
 app.post('/tokensignin', function (req, res) {
   client.verifyIdToken(
     req.body.idtoken,
-    '673527265143-l8gvqn8e0qcm4o23nf914sd9hp0tj82c.apps.googleusercontent.com',
+    process.env.OAUTH_ID,
     // Or, if multiple clients access the backend:
     // [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
     function (e, login) {
