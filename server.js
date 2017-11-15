@@ -72,7 +72,8 @@ app.post('/bulletin', (req, res) => {
 });
 
 const nearbyZips = (lat, lng, dist, callback) => {
-  connection.query(`SELECT zipcode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM zipcodes HAVING distance < ${dist} ORDER BY distance LIMIT 0 , 20;`, (err, rows) => {
+  connection.query(`SELECT zipcode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM zipcodes HAVING (distance < 20) ORDER BY distance;`, (err, rows) => {
+    console.log(dist);
     callback(rows);
   });
 }
@@ -94,7 +95,7 @@ app.post('/search', (req, res) => {
     connection.query(`SELECT lat, lng FROM zipcodes WHERE zipcode=${body}`, (err, zip) => {
       const { lat, lng } = zip[0];
       console.log(lat, lng);
-      nearbyZips(lat, lng, 25, (rows) => {
+      nearbyZips(lat, lng, 1, (rows) => {
         console.log(rows);
       })
     });
