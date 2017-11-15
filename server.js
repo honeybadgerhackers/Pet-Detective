@@ -72,9 +72,10 @@ app.post('/bulletin', (req, res) => {
 });
 
 const nearbyZips = (lat, lng, dist, callback) => {
-  connection.query(`SELECT zipcode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM zipcodes HAVING (distance < 20) ORDER BY distance;`, (err, rows) => {
-    console.log(dist);
-    callback(rows);
+  connection.query(`SELECT postalCode, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( lat ) ) ) ) AS distance FROM postalcodes HAVING (distance < ${dist}) ORDER BY distance;`, (err, rows) => {
+    const zips = rows.map(row => row.postalCode);
+    const zipString = zips.join("%' OR address LIKE '%");
+    callback(zipString);
   });
 }
 
@@ -100,12 +101,20 @@ app.post('/search', (req, res) => {
         }
       });
   } else {
-    connection.query(`SELECT lat, lng FROM zipcodes WHERE zipcode=${searchText}`, (err, zip) => {
-      const { lat, lng } = zip[0];
-      console.log(lat, lng);
-      nearbyZips(lat, lng, 1, (rows) => {
-        console.log(rows);
-      })
+    connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
+      const [{ lat, lng }] = postalCode;
+      nearbyZips(lat, lng, 3, (postalCodes) => {
+        // console.log(`SELECT * FROM petpost WHERE address like '%${postalCodes}%'`);
+        connection.query(
+          `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (err, rows) => {
+            console.log(err, rows);
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(rows);
+            }
+          });
+      });
     });
   }
   // const [lat, lng] = req.body.searchField.split(',');
