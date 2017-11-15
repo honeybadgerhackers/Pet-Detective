@@ -169,7 +169,6 @@
             <select name="lostOrFound" ng-model="ctrl.lostStatus">
               <option value="Lost">Lost</option>
               <option value="Found">Found</option>
-              <i ng-hide="ctrl.lostStatus.$error.required">*required</i>
               <br>
             </select>
             <tt style="color: white">{{ctrl.lostStatus}} Pet</tt>
@@ -177,9 +176,7 @@
             <br>
             <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
             <br>
-            <select name="singleSelect" ng-model="ctrl.selectedSpecies">
-              <option ng-repeat="type in ctrl.speciesList" value="{{type}}">{{type}}</option>
-            </select>
+            <select ng-model="ctrl.selectedSpecies" ng-options="type for type in ctrl.speciesList"></select>
             <tt style="color: white"> Type of Pet: {{ctrl.selectedSpecies}}</tt>
             <div class="form-group">
               <br>
