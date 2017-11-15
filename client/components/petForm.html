@@ -235,6 +235,9 @@
             <img ng-src={{$window.imgSrc}} />
             </br>
             <br>
+            <div ng-if="ctrl.missingField" style="color: rgb(178,0,89)">
+              {{ctrl.missingField}}
+            </div>
             <div class="wrapper">
               <span class="group-btn">
                 <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date)"
@@ -269,7 +272,7 @@
                   <b>{{bulletin.date}}</b>
                 </h4>
               </div>
-              <div style="" ng-if="bulletin.petPic !== 'undefined'">
+              <div ng-if="bulletin.petPic !== 'undefined'">
                 <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
               </div>
               <div style="height: 100px">

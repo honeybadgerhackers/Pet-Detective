@@ -11,7 +11,8 @@ angular.module('pet-detective')
     this.tags = [];
     this.selectedSpecies = '';
     this.lostStatus = '';
-    this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish'];
+    this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
+    this.missingField = '';
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -41,6 +42,10 @@ angular.module('pet-detective')
     };
 
     this.submit = function (place, formBody /* , img, date , style */) {
+      if (!this.lostStatus || !this.selectedSpecies) {
+        this.missingField = !this.lostStatus ? 'Lost or Found field required' : 'Animal Type Field Required';
+        return;
+      }
       this.date = new Date()
         .toString()
         .split(' ')
@@ -71,6 +76,7 @@ angular.module('pet-detective')
           this.address = null;
           this.tags = [];
           this.img = null;
+          this.missingField = '';
           this.createMap();
         });
     };
