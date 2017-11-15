@@ -1,4 +1,4 @@
-angular.module('pet-detective', ['google.places'])
+angular.module('pet-detective', ['google.places', 'ngTagsInput'])
   .controller('appController', function () {
   })
   .directive('app', function () {

@@ -6,8 +6,9 @@ angular.module('pet-detective')
     this.place = '';
     this.formBody = '';
     this.type = null;
-    this.latLong = null;
+    this.latlong = null;
     this.img = null;
+    this.tags = [];
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -50,11 +51,6 @@ angular.module('pet-detective')
       option1: 'Lost',
       option2: 'Found',
     };
-
-    this.petStyles = {
-      multipleSelect: [],
-    };
-
     this.submit = function (place, formBody /* , img, date , style */) {
       this.date = new Date()
         .toString()
@@ -72,8 +68,8 @@ angular.module('pet-detective')
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
-          styles: this.petStyles.multipleSelect,
-          latLong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
+          styles: this.tags.map(tag => ` ${tag.text}`),
+          latlong: [this.place.geometry.location.lat(), this.place.geometry.location.lng()],
           petPic: window.imgSrc,
         },
       })
@@ -84,12 +80,12 @@ angular.module('pet-detective')
           this.petState.lostOrFound = null;
           this.formBody = null;
           this.address = null;
+          this.tags = [];
           this.img = null;
-          this.styles = null;
           this.createMap();
         });
     };
-
+    this.loadTags = () => $http.get('./searchTags/petTags.json');
     this.createMap = (lat = 29.945947, long = -90.070023) => {
       this.woa = {
         city: 'PET',
@@ -108,7 +104,7 @@ angular.module('pet-detective')
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
       this.bulletinData.forEach((obj) => {
-        const cord = obj.latLong.split(',');
+        const cord = obj.latlong.split(',');
         obj.lat = cord[0];
         obj.long = cord[1];
       });

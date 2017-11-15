@@ -79,20 +79,28 @@ const nearbyZips = (lat, lng, dist, callback) => {
 }
 
 app.post('/search', (req, res) => {
-  // To implement a radius search, I need an array of zipcodes within that radius. 
-  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query 
-  // those against each other. 
-  const body = req.body.searchField;
-  if (isNaN(body)) {
-    connection.query(`select * from petpost where address like '%${body``}%' or message like '%${body}%' or type like '%${body}%' or date like'%${body}%' or lostOrFound like '%${body}%'`, function (err, rows) {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(rows);
-      }
-    });
+  // To implement a radius search, I need an array of zipcodes within that radius.
+  // It sounds like I'll need to convert zipcodes to a lat/longitude, and then query
+  // those against each other.
+  const searchText = req.body.searchField;
+  if (isNaN(searchText)) {
+    connection.query(
+      `select * from petpost where 
+      address like '%${searchText}%'
+      or message like '%${searchText}%'
+      or styles like '%${searchText}%'
+      or type like '%${searchText}%'
+      or date like'%${searchText}%'
+      or lostOrFound like '%${searchText}%'`,
+      (err, rows) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(rows);
+        }
+      });
   } else {
-    connection.query(`SELECT lat, lng FROM zipcodes WHERE zipcode=${body}`, (err, zip) => {
+    connection.query(`SELECT lat, lng FROM zipcodes WHERE zipcode=${searchText}`, (err, zip) => {
       const { lat, lng } = zip[0];
       console.log(lat, lng);
       nearbyZips(lat, lng, 1, (rows) => {
