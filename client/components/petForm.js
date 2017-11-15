@@ -9,12 +9,15 @@ angular.module('pet-detective')
     this.latlong = null;
     this.img = null;
     this.tags = [];
+    this.selectedSpecies = '';
+    this.lostStatus = '';
+    this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
+    this.missingField = '';
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
       return this.bulletinData;
     };
-
 
     this.fetchSearchResults = function (search) {
       return $http({
@@ -38,20 +41,11 @@ angular.module('pet-detective')
       return this.bulletinData;
     };
 
-    this.data = {
-      singleSelect: '',
-      multipleSelect: [],
-      option1: 'Cat',
-      option2: 'Dog',
-    };
-
-    this.petState = {
-      lostOrFound: '',
-      multipleSelect: [],
-      option1: 'Lost',
-      option2: 'Found',
-    };
     this.submit = function (place, formBody /* , img, date , style */) {
+      if (!this.lostStatus || !this.selectedSpecies) {
+        this.missingField = !this.lostStatus ? 'Lost or Found field required' : 'Animal Type Field Required';
+        return;
+      }
       this.date = new Date()
         .toString()
         .split(' ')
@@ -63,8 +57,8 @@ angular.module('pet-detective')
         data: {
           user: this.email,
           userpic: this.profileInfo.Paa,
-          lostOrFound: this.petState.lostOrFound,
-          type: this.data.singleSelect,
+          lostOrFound: this.lostStatus,
+          type: this.selectedSpecies,
           address: this.place.formatted_address,
           message: formBody,
           date: this.date,
@@ -76,12 +70,13 @@ angular.module('pet-detective')
         .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
           this.bulletinData = bulletins;
-          this.data.singleSelect = null;
-          this.petState.lostOrFound = null;
+          this.selectedSpecies = null;
+          this.lostStatus = null;
           this.formBody = null;
           this.address = null;
           this.tags = [];
           this.img = null;
+          this.missingField = '';
           this.createMap();
         });
     };
