@@ -102,17 +102,17 @@ angular.module('pet-detective')
         });
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
-    this.createMap = (lat = 29.945947, long = -90.070023) => {
+    this.createMap = (lat = 39.5, long = -96.35) => {
       this.woa = {
         city: 'PET',
       };
       // set up new marker images
-      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_constter&chld=%E2%80%A2|0000FF');
+      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF');
       const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
       // set up map
       this.mapOptions = {
-        zoom: 12,
+        zoom: 3,
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       };
@@ -121,12 +121,18 @@ angular.module('pet-detective')
 
       this.bulletinData.forEach((obj) => {
         const cord = obj.latlong.split(',');
+        // console.log(cord);
         obj.lat = cord[0];
         obj.long = cord[1];
       });
 
       for (let i = 0; i < this.bulletinData.length; i += 1) {
         this.addMarker = function () {
+          if (this.bulletinData[i].lostOrFound === 'lost') {
+            this.bulletinData[i].lostOrFound = 'Lost';
+          } else if (this.bulletinData[i].lostOrFound === 'found') {
+            this.bulletinData[i].lostOrFound = 'Found';
+          }
           this.mymarker = new google.maps.Marker({
             map: this.mymapdetail,
             // animation: google.maps.Animation.DROP,

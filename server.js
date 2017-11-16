@@ -21,6 +21,7 @@ const connection = mysql.createConnection(config);
 const auth = new GoogleAuth();
 const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
 
+// console.log(auth);
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -109,6 +110,7 @@ app.post('/tokensignin', function (req, res) {
     function (e, login) {
       let token;
       const payload = login.getPayload();
+      console.log(payload);
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
       if (payload) {
