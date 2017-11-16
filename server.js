@@ -61,7 +61,7 @@ app.post('/bulletin', (req, res) => {
 
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
-  if (isNaN(searchText)) {
+  if (isNaN(searchText) || distance === undefined) {
     connection.query(
       `select * from petpost where 
       address like '%${searchText}%'
@@ -81,7 +81,7 @@ app.post('/search', (req, res) => {
     connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
       if (err) {
         res.send(err);
-      } else {
+      } else if (postalCode.length) {
         const [{ lat, lng }] = postalCode;
         utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
           connection.query(
@@ -93,6 +93,8 @@ app.post('/search', (req, res) => {
               }
             });
         }, connection);
+      } else {
+        res.send([]);
       }
     });
   }
