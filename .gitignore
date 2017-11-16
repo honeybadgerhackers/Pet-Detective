@@ -9,3 +9,4 @@ dist/
 docker-compose.yml
 app.yaml
 petdetective.pem
+.ideas
