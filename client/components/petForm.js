@@ -21,6 +21,7 @@ angular.module('pet-detective')
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
     this.missingField = '';
+    this.infoWindow = null;
     this.noResultText = false;
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
@@ -96,7 +97,7 @@ angular.module('pet-detective')
         });
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
-    this.createMap = (lat = 39.5, long = -96.35, zoom = 3) => {
+    this.createMap = (lat = 39.5, long = -96.35) => {
       this.woa = {
         city: 'PET',
       };
@@ -106,7 +107,7 @@ angular.module('pet-detective')
 
       // set up map
       this.mapOptions = {
-        zoom,
+        zoom: 3,
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       };
@@ -119,7 +120,7 @@ angular.module('pet-detective')
         obj.lat = cord[0];
         obj.long = cord[1];
       });
-
+      
       for (let i = 0; i < this.bulletinData.length; i += 1) {
         this.addMarker = function () {
           if (this.bulletinData[i].lostOrFound === 'lost') {
@@ -152,9 +153,26 @@ angular.module('pet-detective')
           sco.open = infowindow;
         });
       }
+      this.infoWindow = new google.maps.InfoWindow;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          
+          this.infoWindow.setPosition(pos);
+          this.infoWindow.setContent('Location found.');
+          this.infoWindow.open(this.mymapdetail);
+          this.mymapdetail.setCenter(pos);
+          this.mymapdetail.setZoom(12);
+        });
+      }
     };
     this.bullClick = (bull) => {
-      this.createMap(bull.lat, bull.long, 12);
+      const latLng = new google.maps.LatLng(bull.lat, bull.long);
+      this.mymapdetail.setCenter(latLng);
+      this.mymapdetail.setZoom(12);
     };
 
     this.deletePost = (bully) => {
