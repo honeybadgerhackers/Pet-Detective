@@ -4,42 +4,39 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
-
+const { PORT, DB: host, DB_USER: user, DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
 const app = express();
-const PORT = process.env.PORT;
 
 const connection = mysql.createConnection({
-  host: process.env.DB,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host,
+  user,
+  password,
   database: 'petdetective',
 });
 const pool = mysql.createPool({
-  host: process.env.DB,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host,
+  user,
+  password,
   database: 'petdetective',
 });
 pool.getConnection(function (err, conn) {
   if (err) {
     console.error(err);
   }
-  connection.query('select * from petpost', function (error /* , results, fields */) {
-    if (error) console.error(error);
+  conn.query('select * from petpost', function (error /* , results, fields */) {
+    console.warn(err || `succesfully queryied petpost at ${host}`);
   });
 });
 
 const auth = new GoogleAuth();
-const client = new auth.OAuth2(process.env.OAUTH_ID, '', '');
+const client = new auth.OAuth2(OAUTH_ID, '', '');
 
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to database ...', err);
-  }
+  console.warn(err || `succesfully connected to DB ${host}`);
 });
 
 /* eslint-disable */
@@ -90,12 +87,10 @@ app.post('/search', (req, res) => {
 });
 
 app.post('/tokensignin', function (req, res) {
-  
   console.log("AM I WORKING?");
-
   client.verifyIdToken(
     req.body.idtoken,
-    process.env.OAUTH_ID,
+    OAUTH_ID,
     // Or, if multiple clients access the backend:
     // [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
     function (e, login) {
@@ -104,7 +99,7 @@ app.post('/tokensignin', function (req, res) {
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
       if (payload) {
-        token = jwt.sign(payload, process.env.MY_SECRET);
+        token = jwt.sign(payload, MY_SECRET);
       }
       connection.query(`select * from users where email = '${payload.email}'`, (err, data) => {
         if (!data.length) {
