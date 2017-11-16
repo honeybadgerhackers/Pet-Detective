@@ -4,9 +4,19 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
+
 const { PORT, DB: host, DB_USER: user, DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
 const app = express();
 
+console.warn(
+  PORT,
+  host,
+  user,
+  password,
+  OAUTH_ID,
+  MY_SECRET
+);
+console.warn("Hello WOrlds");
 const connection = mysql.createConnection({
   host,
   user,
