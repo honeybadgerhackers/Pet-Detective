@@ -6,22 +6,30 @@ const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
 const utilities = require('./utils/searchUtils');
 
-const { PORT, DB: host, DB_USER: user, DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
+// const { PORT, DB: host, DB_USER: user, 
+// DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
+const PORT = process.env.PORT;
+const DB = process.env.DB;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const OAUTH_ID = process.env.OAUTH_ID;
+const MY_SECRET = process.env.MY_SECRET;
+
 const app = express();
 
 console.warn(
   PORT,
-  host,
-  user,
-  password,
+  DB,
+  DB_USER,
+  DB_PASSWORD,
   OAUTH_ID,
   MY_SECRET
 );
 console.warn('Hello WOrlds');
 const connection = mysql.createConnection({
-  host,
-  user,
-  password,
+  host: DB,
+  user: DB_USER,
+  password: DB_PASSWORD,
   database: 'petdetective',
 });
 // const pool = mysql.createPool({
@@ -47,7 +55,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 connection.connect((err) => {
-  console.warn(err || `succesfully connected to DB ${host}`);
+  console.warn(err || `succesfully connected to DB ${DB}`);
 });
 
 /* eslint-disable */
