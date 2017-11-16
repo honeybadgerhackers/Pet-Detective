@@ -61,7 +61,6 @@ app.post('/bulletin', (req, res) => {
 
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
-  console.log(distance);
   if (isNaN(searchText)) {
     connection.query(
       `select * from petpost where 

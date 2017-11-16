@@ -21,6 +21,7 @@ angular.module('pet-detective')
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
     this.missingField = '';
+    this.noResultText = false;
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -30,6 +31,7 @@ angular.module('pet-detective')
 
     this.fetchSearchResults = function (search, distance) {
       if (search) {
+        this.noResultText = false;
         return $http({
           url: '/search',
           method: 'POST',
@@ -43,8 +45,7 @@ angular.module('pet-detective')
               this.bulletinData = data;
               this.createMap();
             } else {
-              console.log('no results!');
-              // Display 'No results!' on page, change nothing
+              this.noResultText = true;
             }
             this.searchTerm = '';
             this.searchDistance = this.selectDistance[0];
@@ -52,6 +53,7 @@ angular.module('pet-detective')
             console.error(err);
           });
       }
+      return null;
     };
 
     this.render = async function () {
