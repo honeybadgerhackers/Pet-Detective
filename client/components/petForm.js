@@ -56,12 +56,6 @@ angular.module('pet-detective')
       return null;
     };
 
-    this.render = async function () {
-      this.bulletinData = await formDataFactory.fetchFormData();
-      this.createMap();
-      return this.bulletinData;
-    };
-
     this.submit = function (place, formBody /* , img, date , style */) {
       if (!this.lostStatus || !this.selectedSpecies) {
         this.missingField = !this.lostStatus ? 'Lost or Found field required' : 'Animal Type Field Required';
@@ -102,7 +96,7 @@ angular.module('pet-detective')
         });
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
-    this.createMap = (lat = 39.5, long = -96.35) => {
+    this.createMap = (lat = 39.5, long = -96.35, zoom = 3) => {
       this.woa = {
         city: 'PET',
       };
@@ -112,7 +106,7 @@ angular.module('pet-detective')
 
       // set up map
       this.mapOptions = {
-        zoom: 3,
+        zoom,
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP,
       };
@@ -160,7 +154,7 @@ angular.module('pet-detective')
       }
     };
     this.bullClick = (bull) => {
-      this.createMap(bull.lat, bull.long);
+      this.createMap(bull.lat, bull.long, 12);
     };
 
     this.deletePost = (bully) => {
