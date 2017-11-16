@@ -9,30 +9,51 @@ angular.module('pet-detective')
     this.latlong = null;
     this.img = null;
     this.tags = [];
+    this.selectDistance = [
+      { id: null, text: 'none' },
+      { id: 2, text: '2 miles' },
+      { id: 5, text: '5 miles' },
+      { id: 10, text: '10 miles' },
+      { id: 25, text: '25 miles' },
+      { id: 50, text: '50 miles' },
+    ];
     this.selectedSpecies = '';
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
     this.missingField = '';
+    this.noResultText = false;
     this.render = async function () {
       this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
       return this.bulletinData;
     };
 
-    this.fetchSearchResults = function (search) {
-      return $http({
-        url: '/search',
-        method: 'POST',
-        data: {
-          searchField: search,
-        },
-      })
-        .then((response) => {
-          this.bulletinData = response.data;
-          this.createMap();
-        }, (err) => {
-          console.error(err);
-        });
+
+    this.fetchSearchResults = function (search, distance) {
+      if (search) {
+        this.noResultText = false;
+        return $http({
+          url: '/search',
+          method: 'POST',
+          data: {
+            searchField: search,
+            distance,
+          },
+        })
+          .then(({ data }) => {
+            if (data.length) {
+              this.bulletinData = data;
+              this.createMap();
+            } else {
+              this.noResultText = true;
+            }
+            this.searchTerm = '';
+            this.searchDistance = this.selectDistance[0];
+          }, (err) => {
+            console.error(err);
+          });
+      }
+      return null;
     };
 
     this.render = async function () {

@@ -143,20 +143,31 @@
 </style>
 
 <div class="container">
-  <div class="row">
-    <div style="font-family: Roboto, sans-serif;" id="addNew">
+  <div style="font-family: Roboto, sans-serif;" id="addNew">
+    <span style="color: white;">Distance: </span>
+    <div class="row">
+      <div class="col-xs-3" style="padding-bottom: 5px;">
+        <select class="form-control" ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
+        </select>
+      </div>
+      <div class="col-xs-9">
+        <h2 ng-show="ctrl.noResultText" style="color: white;">
+          <span class="label label-info" style="padding-bottom: 2px;">
+            <i>No results!</i>
+          </span>
+        </h2>
+      </div>
+    </div>
       <div id="custom-search-input">
-        <div class="input-group">
-          <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"
-          />
-          <span class="input-group-btn">
-            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm)" class="btn btn-info btn-lg" type="button">
+      <div class="input-group">
+          <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"/>
+            <span class="input-group-btn">
+            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
               <i class="glyphicon glyphicon-search"></i>
             </button>
           </span>
         </div>
       </div>
-    </div>
   </div>
   <div class="row">
     <div ng-init="ctrl.render()">

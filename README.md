@@ -26,9 +26,32 @@ You will need a database called petdetective, created in a mysql session. Once u
 
 `create table petpost (id integer not null auto_increment, lostOrFound varchar(20), type varchar(20) , styles varchar(200), address varchar(140), message varchar(140), date varchar(140), latlong varchar(140), user varchar(75), petPic varchar(220), primary key (id), userpic varchar(220));`
 
-And create a users table with the following:
+Create a users table with the following:
 
 `create table users ( email varchar(75) NOT NULL UNIQUE, picture varchar(220), first_name varchar(25), last_name varchar(25));`
+
+Finally, create a postalcodes table:
+
+```
+create table postalcodes
+(
+  countryCode CHAR(2),
+  postalCode VARCHAR(20),
+  placeName VARCHAR(180),
+  stateName VARCHAR(100),
+  stateCode VARCHAR(20),
+  county VARCHAR(100),
+  countyCode VARCHAR(20),
+  community VARCHAR(100),
+  communityCode VARCHAR(20),
+  lat DECIMAL(6,4),
+  lng DECIMAL(7,4),
+  accuracy TINYINT
+);
+
+LOAD DATA LOCAL
+INFILE './docs/zipcode/US.txt' INTO TABLE postalcodes COLUMNS TERMINATED BY '\t';
+```
 
 ## Installing Dependencies
 

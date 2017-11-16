@@ -4,31 +4,19 @@ require('dotenv').config();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
+const utilities = require('./utils/searchUtils');
 
 const app = express();
 const PORT = process.env.PORT;
-const DB = process.env.DB;
 
-const connection = mysql.createConnection({
-  host: DB,
-  user: 'root',
-  password: '',
+const config = {
+  host: process.env.DB,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: 'petdetective',
-});
-const pool = mysql.createPool({
-  host: DB,
-  user: 'root',
-  password: '',
-  database: 'petdetective',
-});
-pool.getConnection(function (err, conn) {
-  if (err) {
-    console.error(err);
-  }
-  conn.query('select * from petpost', function (error /* , results, fields */) {
-    if (error) console.error(error);
-  });
-});
+};
+
+const connection = mysql.createConnection(config);
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
@@ -72,22 +60,44 @@ app.post('/bulletin', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const searchText = req.body.searchField;
-  connection.query(
-    `select * from petpost where 
-    address like '%${searchText}%'
-    or message like '%${searchText}%'
-    or styles like '%${searchText}%'
-    or type like '%${searchText}%'
-    or date like'%${searchText}%'
-    or lostOrFound like '%${searchText}%'`,
-    (err, rows) => {
+  const { searchField: searchText, distance } = req.body;
+  if (isNaN(searchText) || distance === undefined) {
+    connection.query(
+      `select * from petpost where 
+      address like '%${searchText}%'
+      or message like '%${searchText}%'
+      or styles like '%${searchText}%'
+      or type like '%${searchText}%'
+      or date like'%${searchText}%'
+      or lostOrFound like '%${searchText}%'`,
+      (err, rows) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(rows);
+        }
+      });
+  } else {
+    connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
       if (err) {
         res.send(err);
+      } else if (postalCode.length) {
+        const [{ lat, lng }] = postalCode;
+        utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
+          connection.query(
+            `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
+              if (error) {
+                res.send(error);
+              } else {
+                res.send(rows);
+              }
+            });
+        }, connection);
       } else {
-        res.send(rows);
+        res.send([]);
       }
     });
+  }
 });
 
 app.post('/tokensignin', function (req, res) {
