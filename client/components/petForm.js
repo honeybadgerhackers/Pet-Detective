@@ -9,7 +9,14 @@ angular.module('pet-detective')
     this.latlong = null;
     this.img = null;
     this.tags = [];
-    this.selectDistance = ['none', 2, 5, 10, 25, 50];
+    this.selectDistance = [
+      { id: null, text: 'none' },
+      { id: 2, text: '2 miles' },
+      { id: 5, text: '5 miles' },
+      { id: 10, text: '10 miles' },
+      { id: 25, text: '25 miles' },
+      { id: 50, text: '50 miles' },
+    ];
     this.selectedSpecies = '';
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
@@ -36,6 +43,7 @@ angular.module('pet-detective')
               this.bulletinData = data;
               this.createMap();
             } else {
+              console.log('no results!');
               // Display 'No results!' on page, change nothing
             }
             this.searchTerm = '';

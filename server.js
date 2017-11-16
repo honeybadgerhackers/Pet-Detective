@@ -8,6 +8,7 @@ const utilities = require('./utils/searchUtils');
 
 const app = express();
 const PORT = process.env.PORT;
+
 const config = {
   host: process.env.DB,
   user: process.env.DB_USER,
@@ -16,17 +17,6 @@ const config = {
 };
 
 const connection = mysql.createConnection(config);
-
-const pool = mysql.createPool(config);
-
-pool.getConnection(function (err) {
-  if (err) {
-    console.error(err);
-  }
-  connection.query('select * from petpost', function (error /* , results, fields */) {
-    if (error) console.error(error);
-  });
-});
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
@@ -70,7 +60,8 @@ app.post('/bulletin', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const searchText = req.body.searchField;
+  const { searchField: searchText, distance } = req.body;
+  console.log(distance);
   if (isNaN(searchText)) {
     connection.query(
       `select * from petpost where 
@@ -93,7 +84,7 @@ app.post('/search', (req, res) => {
         res.send(err);
       } else {
         const [{ lat, lng }] = postalCode;
-        utilities.nearbyZips(lat, lng, 3, (postalCodes) => {
+        utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
           connection.query(
             `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
               if (error) {

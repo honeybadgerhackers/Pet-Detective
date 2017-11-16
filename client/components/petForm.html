@@ -147,14 +147,14 @@
     <div style="font-family: Roboto, sans-serif;" id="addNew">
       <div id="custom-search-input">
         <div class="input-group">
-          <select ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance for distance in ctrl.selectDistance">
+          <span style="color: white;">Distance: </span><select ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
             
             <!-- <option ng-repeat="distance in ctrl.selectDistance" value="{{distance}}">{{distance}}</option> -->
           </select>
           <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"
           />
           <span class="input-group-btn">
-            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchDistance)" class="btn btn-info btn-lg" type="button">
+            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
               <i class="glyphicon glyphicon-search"></i>
             </button>
           </span>
