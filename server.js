@@ -8,7 +8,6 @@ const utilities = require('./utils/searchUtils');
 
 const { PORT, DB: host, DB_USER: user, DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
 const app = express();
-<<<<<<< HEAD
 
 console.warn(
   PORT,
@@ -39,18 +38,6 @@ const connection = mysql.createConnection({
 //     console.warn(err || `succesfully queryied petpost at ${host}`);
 //   });
 // });
-=======
-const PORT = process.env.PORT;
-
-const config = {
-  host: process.env.DB,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: 'petdetective',
-};
-
-const connection = mysql.createConnection(config);
->>>>>>> 22b72073d54563716a2cc52fd07a983b8d801914
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2(OAUTH_ID, '', '');
