@@ -16,7 +16,7 @@ console.warn(
   OAUTH_ID,
   MY_SECRET
 );
-console.warn("Hello WOrlds");
+console.warn('Hello WOrlds');
 const connection = mysql.createConnection({
   host,
   user,
@@ -97,7 +97,7 @@ app.post('/search', (req, res) => {
 });
 
 app.post('/tokensignin', function (req, res) {
-  console.log("AM I WORKING?");
+  console.log('AM I WORKING?');
   client.verifyIdToken(
     req.body.idtoken,
     OAUTH_ID,
