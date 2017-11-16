@@ -23,20 +23,20 @@ const connection = mysql.createConnection({
   password,
   database: 'petdetective',
 });
-const pool = mysql.createPool({
-  host,
-  user,
-  password,
-  database: 'petdetective',
-});
-pool.getConnection(function (err, conn) {
-  if (err) {
-    console.error(err);
-  }
-  conn.query('select * from petpost', function (error /* , results, fields */) {
-    console.warn(err || `succesfully queryied petpost at ${host}`);
-  });
-});
+// const pool = mysql.createPool({
+//   host,
+//   user,
+//   password,
+//   database: 'petdetective',
+// });
+// pool.getConnection(function (err, conn) {
+//   if (err) {
+//     console.error(err);
+//   }
+//   conn.query('select * from petpost', function (error /* , results, fields */) {
+//     console.warn(err || `succesfully queryied petpost at ${host}`);
+//   });
+// });
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2(OAUTH_ID, '', '');
