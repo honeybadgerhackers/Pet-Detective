@@ -6,16 +6,15 @@ const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
 const utilities = require('./utils/searchUtils');
 
-// const { PORT, DB: host, DB_USER: user, 
-// DB_PASSWORD: password, OAUTH_ID, MY_SECRET } = process.env;
-const PORT = process.env.PORT;
-const DB = process.env.DB;
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const OAUTH_ID = process.env.OAUTH_ID;
-const MY_SECRET = process.env.MY_SECRET;
-
 const app = express();
+const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY, OAUTH_ID, MY_SECRET } = process.env;
+
+const config = {
+  host: DB,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: 'petdetective',
+};
 
 console.warn(
   PORT,
@@ -50,6 +49,7 @@ const connection = mysql.createConnection({
 const auth = new GoogleAuth();
 const client = new auth.OAuth2(OAUTH_ID, '', '');
 
+// console.log(auth);
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -88,15 +88,10 @@ app.post('/bulletin', (req, res) => {
 
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
-  if (isNaN(searchText) || distance === undefined) {
+  if (!distance) {
     connection.query(
       `select * from petpost where 
-      address like '%${searchText}%'
-      or message like '%${searchText}%'
-      or styles like '%${searchText}%'
-      or type like '%${searchText}%'
-      or date like'%${searchText}%'
-      or lostOrFound like '%${searchText}%'`,
+      address like '%${searchText}%'`,
       (err, rows) => {
         if (err) {
           res.send(err);
@@ -105,25 +100,17 @@ app.post('/search', (req, res) => {
         }
       });
   } else {
-    connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
-      if (err) {
-        res.send(err);
-      } else if (postalCode.length) {
-        const [{ lat, lng }] = postalCode;
-        utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
-          connection.query(
-            `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
-              if (error) {
-                res.send(error);
-              } else {
-                res.send(rows);
-              }
-            });
+    utilities.getCoords(searchText, GOOGLE_API_KEY)
+      .then((result) => {
+        const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
+        utilities.radiusSearch(lat, lng, distance, (error, searchResults) => {
+          if (error) {
+            res.send(error);
+          } else {
+            res.send(searchResults);
+          }
         }, connection);
-      } else {
-        res.send([]);
-      }
-    });
+      });
   }
 });
 
