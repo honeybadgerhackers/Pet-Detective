@@ -45,7 +45,7 @@ angular.module('pet-detective')
           .then(({ data }) => {
             if (data.length) {
               this.bulletinData = data;
-              this.createMap();
+              this.placeMarkers();
             } else {
               this.noResultText = true;
             }
@@ -94,7 +94,7 @@ angular.module('pet-detective')
           this.tags = [];
           this.img = null;
           this.missingField = '';
-          this.createMap();
+          this.placeMarkers();
         });
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
