@@ -45,6 +45,7 @@ angular.module('pet-detective')
           .then(({ data }) => {
             if (data.length) {
               this.bulletinData = data;
+              this.removeMarkers();
               this.placeMarkers();
             } else {
               this.noResultText = true;
@@ -93,6 +94,7 @@ angular.module('pet-detective')
           this.address = null;
           this.tags = [];
           this.img = null;
+          this.markers = null;
           this.missingField = '';
           this.placeMarkers();
         });
@@ -111,6 +113,12 @@ angular.module('pet-detective')
       });
       this.markers[id] = marker;
       return marker;
+    };
+
+    this.removeMarkers = () => {
+      Object.values(this.markers).forEach((marker) => {
+        marker.setMap(null);
+      });
     };
 
     this.placeMarkers = () => {
