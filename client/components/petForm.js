@@ -7,7 +7,7 @@ angular.module('pet-detective')
     this.formBody = '';
     this.type = null;
     this.latlong = null;
-    this.markers = [];
+    this.markers = {};
     this.img = null;
     this.tags = [];
     this.selectDistance = [
@@ -99,19 +99,17 @@ angular.module('pet-detective')
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
 
-    this.addMarker = function ({ lostOrFound, lat, long }) {
-      console.log('running?');
+    this.addMarker = function ({ id, lostOrFound, lat, long }) {
       const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF');
       const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
       const marker = new google.maps.Marker({
         map: this.mymapdetail,
-        // animation: google.maps.Animation.DROP,
         position: new google.maps.LatLng(lat, long),
         title: this.woa.city,
         icon: lostOrFound === 'Lost' ? redMarker : blueMarker,
       });
-      this.markers.push(marker);
+      this.markers[id] = marker;
       return marker;
     };
 
@@ -156,25 +154,27 @@ angular.module('pet-detective')
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          
+
           this.mymapdetail.setCenter(pos);
           this.mymapdetail.setZoom(12);
         });
       }
     };
-    
-    this.bullClick = (bull) => {
-      const latLng = new google.maps.LatLng(bull.lat, bull.long);
+
+    this.bullClick = ({ lat, long }) => {
+      const latLng = new google.maps.LatLng(lat, long);
       this.mymapdetail.setCenter(latLng);
       this.mymapdetail.setZoom(12);
     };
 
     this.deletePost = (bully) => {
+      const id = bully.id;
       $http.post('/deletePost', bully)
         .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
           this.bulletinData = bulletins;
-          this.createMap();
+          this.markers[id].setMap(null);
+          delete this.markers[id];
         });
     };
     this.modal = (img) => {
