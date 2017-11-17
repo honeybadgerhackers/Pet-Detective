@@ -41,31 +41,40 @@ const userInfo = {
   photo: '',
 };
 
-// const objectRows = testData.comments.reduce((prev, current) => {
-//   if (!prev[current.postId]) {
-//     prev[current.postId] = [];
-//   }
-//   prev[current.postId].push(current);
-//   return prev;
-// }, {});
 
 app.get('/bulletin', (req, res) => {
-  connection.query('select * from petpost', (err, rows /* , fields */) => {
+  connection.query('select * from petpost', (err, posts) => {
     if (err) {
       res.send(err);
     } else {
-      // const combined = rows.map((e) => {
-      //   e.comments = objectRows[e.id];
-      //   return e;
-      // });
-      res.send(rows);
+      connection.query('select * from comments', (error, comments) => {
+        const objectRows = comments.reduce((prev, current) => {
+          if (!prev[current.postId]) {
+            prev[current.postId] = [];
+          }
+          prev[current.postId].push(current);
+          return prev;
+        }, {});
+
+        const combined = posts.map((e) => {
+          e.comments = objectRows[e.id];
+          return e;
+        });
+
+        res.send(combined);
+      });
     }
   });
 });
 
 app.post('/comments', (req, res) => {
-  console.log(req.body);
-  res.end();
+  const { comment, senderEmail, postId, time, name } = req.body;
+  connection.query(`insert into comments (postId, name, message, time, senderEmail) values ('${postId}', '${name}', '${comment}', '${time}', '${senderEmail}')`, (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+  res.sendStatus(201);
 });
 
 app.post('/bulletin', (req, res) => {
