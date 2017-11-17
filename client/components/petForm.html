@@ -140,6 +140,50 @@
   .custom-prediction-label {
     font-style: italic;
   }
+
+
+  .commentBox {
+      padding:10px;
+      border-top:1px dotted #bbb;
+  }
+  .commentBox .form-group:first-child, .actionBox .form-group:first-child {
+      width:80%;
+  }
+  .commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+      width:18%;
+  }
+  .actionBox .form-group * {
+      width:100%;
+  }
+  .taskDescription {
+      margin-top:10px 0;
+  }
+  .commentList {
+      padding:0;
+      list-style:none;
+      max-height:200px;
+      overflow:auto;
+  }
+  .commentList li {
+      margin:0;
+      margin-top:10px;
+  }
+  .commentList li > div {
+      display:table-cell;
+  }
+  .commentText p {
+      margin:0;
+  }
+  .sub-text {
+      color:#aaa;
+      font-family:verdana;
+      font-size:11px;
+  }
+  .actionBox {
+      border-top:1px dotted #bbb;
+       padding:10px;
+  }
+
 </style>
 
 <div class="container">
@@ -260,14 +304,34 @@
   <div class="row">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6" ng-repeat-start="bulletin in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;"
-          ng-click="ctrl.bullClick(bulletin)">
+        <div class="col-lg-6" ng-repeat="bulletin in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;">
           <div ng-if="bulletin.user === ctrl.email">
             <button style="float: right; padding: 2% 1%" type="button" class="close" aria-label="Close" ng-click="ctrl.deletePost(bulletin)">
               <span style="top: 3px; right: 3px; position: absolute;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
             </button>
           </div>
           <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
+          <button type="button" ng-click="ctrl.bullClick(bulletin)" class="btn btn-info">Show on map</button>          
+          <button type="button" class="btn btn-info" data-toggle="collapse" data-target={{'#'+bulletin.id}} >Comments</button>
+          <div id={{bulletin.id}} class="collapse form-login">
+            <div class="actionBox">
+              <ul class="commentList">
+                  <div ng-repeat="comment in bulletin.comments">
+                      <div class="commentText">
+                          <p class="">{{comment.comment}}</p> <span class="date sub-text">on {{comment.dateSent}} at {{comment.timeSent}}</span>
+                      </div>
+                  </disv>
+              </ul>
+              <form class="form-inline" role="form">
+                  <div class="form-group">
+                      <input class="form-control" type="text" placeholder="Your comments" />
+                  </div>
+                  <div class="form-group">
+                      <button class="btn btn-default">Add</button>
+                  </div>
+              </form>
+            </div>
+          </div>
           <!-- <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a> -->
           <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h3>
           <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
@@ -300,7 +364,6 @@
             {{bulletin.address}}
           </div>
         </div>
-        <div ng-repeat-end=""></div>
       </div>
     </div>
   </div>
