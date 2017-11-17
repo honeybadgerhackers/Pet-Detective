@@ -186,13 +186,14 @@ angular.module('pet-detective')
       this.mymapdetail.setZoom(12);
     };
 
-    this.sendComment = (bulletinId) => {
+    this.sendComment = (bulletinId, postEmail) => {
       const date = new Date().toString();
       const data = {
         comment: this.commentText,
         senderEmail: this.email,
         postId: bulletinId,
         time: date,
+        postEmail,
       };
       $http.post('/comments', data)
         .then(formDataFactory.fetchFormData)
