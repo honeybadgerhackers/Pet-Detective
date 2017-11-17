@@ -193,6 +193,7 @@ angular.module('pet-detective')
         senderEmail: this.email,
         postId: bulletinId,
         time: date,
+        name: this.profileName,
         postEmail,
       };
       $http.post('/comments', data)
