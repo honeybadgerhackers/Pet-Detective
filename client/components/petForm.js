@@ -7,6 +7,7 @@ angular.module('pet-detective')
     this.formBody = '';
     this.type = null;
     this.latlong = null;
+    this.markers = {};
     this.img = null;
     this.tags = [];
     this.selectDistance = [
@@ -21,15 +22,15 @@ angular.module('pet-detective')
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
     this.missingField = '';
+    this.infoWindow = null;
     this.noResultText = false;
     this.render = async function () {
-      this.bulletinData = await formDataFactory.fetchFormData();
+      // this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
-      return this.bulletinData;
+      // return this.bulletinData;
     };
 
-
-    this.fetchSearchResults = function (search, distance) {
+    this.fetchSearchResults = function (search, distance, initialSearch) {
       if (search) {
         this.noResultText = false;
         return $http({
@@ -43,23 +44,20 @@ angular.module('pet-detective')
           .then(({ data }) => {
             if (data.length) {
               this.bulletinData = data;
-              this.createMap();
+              this.removeMarkers();
+              this.placeMarkers();
             } else {
               this.noResultText = true;
             }
-            this.searchTerm = '';
-            this.searchDistance = this.selectDistance[0];
+            if (!initialSearch) {
+              this.searchTerm = '';
+              this.searchDistance = this.selectDistance[0];
+            }
           }, (err) => {
             console.error(err);
           });
       }
       return null;
-    };
-
-    this.render = async function () {
-      this.bulletinData = await formDataFactory.fetchFormData();
-      this.createMap();
-      return this.bulletinData;
     };
 
     this.submit = function (place, formBody /* , img, date , style */) {
@@ -97,52 +95,45 @@ angular.module('pet-detective')
           this.address = null;
           this.tags = [];
           this.img = null;
+          this.markers = null;
           this.missingField = '';
-          this.createMap();
+          this.placeMarkers();
         });
     };
     this.loadTags = () => $http.get('./searchTags/petTags.json');
-    this.createMap = (lat = 29.945947, long = -90.070023) => {
-      this.woa = {
-        city: 'PET',
-      };
-      // set up new marker images
-      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_constter&chld=%E2%80%A2|0000FF');
+
+    this.addMarker = function ({ id, lostOrFound, lat, long }) {
+      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF');
       const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
-      // set up map
-      this.mapOptions = {
-        zoom: 12,
-        center: new google.maps.LatLng(lat, long),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-      };
-
-      this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
-
-      this.bulletinData.forEach((obj) => {
-        const cord = obj.latlong.split(',');
-        obj.lat = cord[0];
-        obj.long = cord[1];
+      const marker = new google.maps.Marker({
+        map: this.mymapdetail,
+        position: new google.maps.LatLng(lat, long),
+        title: this.woa.city,
+        icon: lostOrFound === 'Lost' ? redMarker : blueMarker,
       });
+      this.markers[id] = marker;
+      return marker;
+    };
 
-      for (let i = 0; i < this.bulletinData.length; i += 1) {
-        this.addMarker = function () {
-          this.mymarker = new google.maps.Marker({
-            map: this.mymapdetail,
-            // animation: google.maps.Animation.DROP,
-            position: new google.maps.LatLng(this.bulletinData[i].lat, this.bulletinData[i].long),
-            title: this.woa.city,
-            icon: this.bulletinData[i].lostOrFound === 'Lost' ? redMarker : blueMarker,
-          });
-        };
-        this.addMarker();
+    this.removeMarkers = () => {
+      Object.values(this.markers).forEach((marker) => {
+        marker.setMap(null);
+      });
+    };
+
+    this.placeMarkers = () => {
+      this.bulletinData.forEach((bulletin) => {
+        const cord = bulletin.latlong.split(',');
+        bulletin.lat = cord[0];
+        bulletin.long = cord[1];
         const sco = this;
         const map = this.mymapdetail;
-        const marker = this.mymarker;
-        const img = this.bulletinData[i].petPic;
-        google.maps.event.addListener(sco.mymarker, 'click', () => {
+        const marker = this.addMarker(bulletin);
+        const img = bulletin.petPic;
+        google.maps.event.addListener(marker, 'click', () => {
           const infowindow = new google.maps.InfoWindow({
-            content: `<div>${sco.bulletinData[i].message}</div>
+            content: `<div>${bulletin.message}</div>
                       <img src=${img} style="width:35px;length:35px"/>`,
           });
           if (sco.open) {
@@ -151,18 +142,57 @@ angular.module('pet-detective')
           infowindow.open(map, marker);
           sco.open = infowindow;
         });
+      });
+    };
+
+    this.createMap = (lat = 39.5, long = -96.35) => {
+      this.woa = {
+        city: 'PET',
+      };
+      // set up map
+      this.mapOptions = {
+        zoom: 3,
+        center: new google.maps.LatLng(lat, long),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+      };
+
+      this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
+      const geoError = () => {
+        formDataFactory.fetchFormData()
+          .then((bulletinData) => {
+            this.bulletinData = bulletinData;
+            this.placeMarkers();
+          });
+      };
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
+          const pos = {
+            lat: latitude,
+            lng: longitude,
+          };
+          this.fetchSearchResults(`${latitude}, ${longitude}`, 10, true);
+          this.mymapdetail.setCenter(pos);
+          this.mymapdetail.setZoom(12);
+        }, geoError);
+      } else {
+        geoError();
       }
     };
-    this.bullClick = (bull) => {
-      this.createMap(bull.lat, bull.long);
+
+    this.bullClick = ({ lat, long }) => {
+      const latLng = new google.maps.LatLng(lat, long);
+      this.mymapdetail.setCenter(latLng);
+      this.mymapdetail.setZoom(12);
     };
 
     this.deletePost = (bully) => {
+      const id = bully.id;
       $http.post('/deletePost', bully)
         .then(formDataFactory.fetchFormData)
         .then((bulletins) => {
           this.bulletinData = bulletins;
-          this.createMap();
+          this.markers[id].setMap(null);
+          delete this.markers[id];
         });
     };
     this.modal = (img) => {
