@@ -16,9 +16,7 @@ module.exports = {
 
   radiusSearch(lat, lng, dist, callback, connection) {
     connection.query(`SELECT *, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', -1) ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) ) ) AS distance FROM petpost HAVING (distance < ${dist}) ORDER BY distance;`, (err, rows) => {
-      const zips = rows.map(row => row.postalCode);
-      const zipString = zips.join("%' OR address LIKE '%");
-      callback(zipString);
+      callback(rows);
     });
   };
 };
