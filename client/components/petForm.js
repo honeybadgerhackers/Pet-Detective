@@ -157,9 +157,15 @@ angular.module('pet-detective')
       };
 
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
-
+      const geoError = () => {
+        formDataFactory.fetchFormData()
+          .then((bulletinData) => {
+            this.bulletinData = bulletinData;
+            this.placeMarkers();
+          });
+      };
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude }}) => {
+        navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
           const pos = {
             lat: latitude,
             lng: longitude,
@@ -167,10 +173,9 @@ angular.module('pet-detective')
           this.fetchSearchResults(`${latitude}, ${longitude}`, 10, true);
           this.mymapdetail.setCenter(pos);
           this.mymapdetail.setZoom(12);
-        });
+        }, geoError);
       } else {
-        formDataFactory.fetchFormData()
-          .then(this.placeMarkers);
+        geoError();
       }
     };
 
