@@ -25,12 +25,12 @@ angular.module('pet-detective')
     this.infoWindow = null;
     this.noResultText = false;
     this.render = async function () {
-      this.bulletinData = await formDataFactory.fetchFormData();
+      // this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
-      return this.bulletinData;
+      // return this.bulletinData;
     };
 
-    this.fetchSearchResults = function (search, distance) {
+    this.fetchSearchResults = function (search, distance, initialSearch) {
       if (search) {
         this.noResultText = false;
         return $http({
@@ -49,8 +49,10 @@ angular.module('pet-detective')
             } else {
               this.noResultText = true;
             }
-            this.searchTerm = '';
-            this.searchDistance = this.selectDistance[0];
+            if (!initialSearch) {
+              this.searchTerm = '';
+              this.searchDistance = this.selectDistance[0];
+            }
           }, (err) => {
             console.error(err);
           });
@@ -156,18 +158,19 @@ angular.module('pet-detective')
 
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
-      this.placeMarkers();
-
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
+        navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude }}) => {
           const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
+            lat: latitude,
+            lng: longitude,
           };
-
+          this.fetchSearchResults(`${latitude}, ${longitude}`, 10, true);
           this.mymapdetail.setCenter(pos);
           this.mymapdetail.setZoom(12);
         });
+      } else {
+        formDataFactory.fetchFormData()
+          .then(this.placeMarkers);
       }
     };
 
