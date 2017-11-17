@@ -57,7 +57,9 @@ app.get('/bulletin', (req, res) => {
         }, {});
 
         const combined = posts.map((e) => {
-          e.comments = objectRows[e.id];
+          if (objectRows[e.id]) {
+            e.comments = objectRows[e.id].reverse();
+          }
           return e;
         });
 
