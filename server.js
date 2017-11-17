@@ -97,7 +97,6 @@ app.post('/tokensignin', function (req, res) {
     function (e, login) {
       let token;
       const payload = login.getPayload();
-      console.log(payload);
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
       if (payload) {
