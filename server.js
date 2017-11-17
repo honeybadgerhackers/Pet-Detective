@@ -7,12 +7,12 @@ const GoogleAuth = require('google-auth-library');
 const utilities = require('./utils/searchUtils');
 
 const app = express();
-const PORT = process.env.PORT;
+const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY } = process.env;
 
 const config = {
-  host: process.env.DB,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  host: DB,
+  user: DB_USER,
+  password: DB_PASSWORD,
   database: 'petdetective',
 };
 
@@ -62,6 +62,10 @@ app.post('/bulletin', (req, res) => {
 
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
+  utilities.getCoords(searchText, GOOGLE_API_KEY)
+    .then((result) => {
+      console.log(result);
+    });
   if (isNaN(searchText) || distance === undefined) {
     connection.query(
       `select * from petpost where 

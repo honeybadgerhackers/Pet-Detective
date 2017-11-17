@@ -9,7 +9,8 @@ module.exports = {
     });
   },
 
-  getCoords(location) {
-    return request(`https://maps.googleapis.com/maps/api/geocode/json?${location}`);
+  getCoords(location, GOOGLE_API_KEY) {
+    location = location.split(' ').join('+');
+    return request(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${GOOGLE_API_KEY}`);
   },
 };
