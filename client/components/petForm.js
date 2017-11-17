@@ -113,6 +113,29 @@ angular.module('pet-detective')
       return marker;
     };
 
+    this.placeMarkers = () => {
+      this.bulletinData.forEach((bulletin) => {
+        const cord = bulletin.latlong.split(',');
+        bulletin.lat = cord[0];
+        bulletin.long = cord[1];
+        const sco = this;
+        const map = this.mymapdetail;
+        const marker = this.addMarker(bulletin);
+        const img = bulletin.petPic;
+        google.maps.event.addListener(marker, 'click', () => {
+          const infowindow = new google.maps.InfoWindow({
+            content: `<div>${bulletin.message}</div>
+                      <img src=${img} style="width:35px;length:35px"/>`,
+          });
+          if (sco.open) {
+            sco.open.close();
+          }
+          infowindow.open(map, marker);
+          sco.open = infowindow;
+        });
+      });
+    };
+
     this.createMap = (lat = 39.5, long = -96.35) => {
       this.woa = {
         city: 'PET',
@@ -126,28 +149,8 @@ angular.module('pet-detective')
 
       this.mymapdetail = new google.maps.Map(document.getElementById('map-canvas'), this.mapOptions);
 
-      this.bulletinData.forEach((obj) => {
-        const cord = obj.latlong.split(',');
-        obj.lat = cord[0];
-        obj.long = cord[1];
-      });
-      for (let i = 0; i < this.bulletinData.length; i += 1) {
-        const sco = this;
-        const map = this.mymapdetail;
-        const marker = this.addMarker(this.bulletinData[i]);
-        const img = this.bulletinData[i].petPic;
-        google.maps.event.addListener(marker, 'click', () => {
-          const infowindow = new google.maps.InfoWindow({
-            content: `<div>${sco.bulletinData[i].message}</div>
-                      <img src=${img} style="width:35px;length:35px"/>`,
-          });
-          if (sco.open) {
-            sco.open.close();
-          }
-          infowindow.open(map, marker);
-          sco.open = infowindow;
-        });
-      }
+      this.placeMarkers();
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           const pos = {
