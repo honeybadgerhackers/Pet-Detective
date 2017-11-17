@@ -64,7 +64,8 @@ app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
   utilities.getCoords(searchText, GOOGLE_API_KEY)
     .then((result) => {
-      console.log(result);
+      const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
+      console.log(lat, lng);
     });
   if (isNaN(searchText) || distance === undefined) {
     connection.query(
