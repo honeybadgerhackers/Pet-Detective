@@ -8,3 +8,4 @@ dist/
 /client/map.config.js
 docker-compose.yml
 .ideas
+petdetective.pem
