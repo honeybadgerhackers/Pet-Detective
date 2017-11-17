@@ -41,14 +41,31 @@ const userInfo = {
   photo: '',
 };
 
+// const objectRows = testData.comments.reduce((prev, current) => {
+//   if (!prev[current.postId]) {
+//     prev[current.postId] = [];
+//   }
+//   prev[current.postId].push(current);
+//   return prev;
+// }, {});
+
 app.get('/bulletin', (req, res) => {
   connection.query('select * from petpost', (err, rows /* , fields */) => {
     if (err) {
       res.send(err);
     } else {
+      // const combined = rows.map((e) => {
+      //   e.comments = objectRows[e.id];
+      //   return e;
+      // });
       res.send(rows);
     }
   });
+});
+
+app.post('/comments', (req, res) => {
+  console.log(req.body);
+  res.end();
 });
 
 app.post('/bulletin', (req, res) => {
