@@ -187,6 +187,9 @@ angular.module('pet-detective')
     };
 
     this.sendComment = (bulletinId, postEmail) => {
+      if (!this.commentText.length) {
+        return;
+      }
       const date = new Date().toString();
       const data = {
         comment: this.commentText,
