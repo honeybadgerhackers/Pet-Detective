@@ -65,45 +65,51 @@ app.post('/search', (req, res) => {
   utilities.getCoords(searchText, GOOGLE_API_KEY)
     .then((result) => {
       const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-      console.log(lat, lng);
-    });
-  if (isNaN(searchText) || distance === undefined) {
-    connection.query(
-      `select * from petpost where 
-      address like '%${searchText}%'
-      or message like '%${searchText}%'
-      or styles like '%${searchText}%'
-      or type like '%${searchText}%'
-      or date like'%${searchText}%'
-      or lostOrFound like '%${searchText}%'`,
-      (err, rows) => {
-        if (err) {
-          res.send(err);
+      utilities.radiusSearch(lat, lng, distance, (error, searchResults) => {
+        if (error) {
+          res.send(error);
         } else {
-          res.send(rows);
+          res.send(searchResults);
         }
-      });
-  } else {
-    connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
-      if (err) {
-        res.send(err);
-      } else if (postalCode.length) {
-        const [{ lat, lng }] = postalCode;
-        utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
-          connection.query(
-            `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
-              if (error) {
-                res.send(error);
-              } else {
-                res.send(rows);
-              }
-            });
-        }, connection);
-      } else {
-        res.send([]);
-      }
+      }, connection);
     });
-  }
+  // if (isNaN(searchText) || distance === undefined) {
+  //   connection.query(
+  //     `select * from petpost where 
+  //     address like '%${searchText}%'
+  //     or message like '%${searchText}%'
+  //     or styles like '%${searchText}%'
+  //     or type like '%${searchText}%'
+  //     or date like'%${searchText}%'
+  //     or lostOrFound like '%${searchText}%'`,
+  //     (err, rows) => {
+  //       if (err) {
+  //         res.send(err);
+  //       } else {
+  //         res.send(rows);
+  //       }
+  //     });
+  // } else {
+  //   connection.query(`SELECT lat, lng FROM postalcodes WHERE postalCode=${searchText}`, (err, postalCode) => {
+  //     if (err) {
+  //       res.send(err);
+  //     } else if (postalCode.length) {
+  //       const [{ lat, lng }] = postalCode;
+  //       utilities.nearbyZips(lat, lng, distance, (postalCodes) => {
+  //         connection.query(
+  //           `SELECT * FROM petpost WHERE address like '%${postalCodes}%'`, (error, rows) => {
+  //             if (error) {
+  //               res.send(error);
+  //             } else {
+  //               res.send(rows);
+  //             }
+  //           });
+  //       }, connection);
+  //     } else {
+  //       res.send([]);
+  //     }
+  //   });
+  // }
 });
 
 app.post('/tokensignin', function (req, res) {
