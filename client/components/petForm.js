@@ -30,7 +30,6 @@ angular.module('pet-detective')
       return this.bulletinData;
     };
 
-
     this.fetchSearchResults = function (search, distance) {
       if (search) {
         this.noResultText = false;
