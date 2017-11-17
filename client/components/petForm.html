@@ -141,6 +141,16 @@
     font-style: italic;
   }
 
+  .commentsBox {
+    position: absolute;
+    width: 95%;
+    z-index: 5;
+    border-bottom-right-radius: 0.25em;
+    border-bottom-left-radius: 0.25em;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+  }
 
   .commentBox {
       padding:10px;
@@ -150,7 +160,7 @@
       width:80%;
   }
   .commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
-      width:18%;
+      width:15%;
   }
   .actionBox .form-group * {
       width:100%;
@@ -161,7 +171,7 @@
   .commentList {
       padding:0;
       list-style:none;
-      height: 180px;
+      height: 145px;
       /* max-height:180px; */
       overflow:auto;
   }
@@ -182,7 +192,7 @@
   }
   .actionBox {
       border-top:1px dotted #bbb;
-       /* padding:10px; */
+       padding-top:1px;
   }
 
 </style>
@@ -319,8 +329,7 @@
           <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
             <b>{{bulletin.type}}</b>
           </h3>
-
-          <div id={{bulletin.id}} class="collapse form-login">
+          <div id={{bulletin.id}} class="collapse form-login commentsBox">
             <div class="actionBox">
               <ul class="commentList">
                   <div ng-repeat="comment in bulletin.comments">
