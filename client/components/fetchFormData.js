@@ -6,8 +6,10 @@ angular.module('pet-detective')
           url: '/bulletin',
           method: 'GET',
         })
-          .then(response => response.data,
-            err => console.error(err));
+          .then((response) => {
+            return response.data;
+          },
+          err => console.error(err));
       },
     };
   })
