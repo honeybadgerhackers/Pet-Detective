@@ -30,28 +30,9 @@ Create a users table with the following:
 
 `create table users ( email varchar(75) NOT NULL UNIQUE, picture varchar(220), first_name varchar(25), last_name varchar(25));`
 
-Finally, create a postalcodes table:
+And create a comments table with the following
 
-```
-create table postalcodes
-(
-  countryCode CHAR(2),
-  postalCode VARCHAR(20),
-  placeName VARCHAR(180),
-  stateName VARCHAR(100),
-  stateCode VARCHAR(20),
-  county VARCHAR(100),
-  countyCode VARCHAR(20),
-  community VARCHAR(100),
-  communityCode VARCHAR(20),
-  lat DECIMAL(6,4),
-  lng DECIMAL(7,4),
-  accuracy TINYINT
-);
-
-LOAD DATA LOCAL
-INFILE './docs/zipcode/US.txt' INTO TABLE postalcodes COLUMNS TERMINATED BY '\t';
-```
+`create table comments (postId varchar(20) NOT NULL, name varchar(20) NOT NULL, message varchar(300), time varchar(75), senderEmail varchar(75) NOT NULL);`
 
 ## Installing Dependencies
 
