@@ -88,6 +88,29 @@ app.post('/bulletin', (req, res) => {
   res.sendStatus(201);
 });
 
+const getComments = (res, posts) => {
+  const postIdList = posts.map(e => e.id).join(',');
+  connection.query(`select * from comments where postId in (${postIdList}) `, (error, comments) => {
+    if (error) {
+      console.error(error);
+    }
+    const objectRows = comments.reduce((prev, current) => {
+      if (!prev[current.postId]) {
+        prev[current.postId] = [];
+      }
+      prev[current.postId].push(current);
+      return prev;
+    }, {});
+
+    posts.forEach((e) => {
+      if (objectRows[e.id]) {
+        e.comments = objectRows[e.id].reverse();
+      }
+    });
+    res.send(posts);
+  });
+};
+
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
   if (!distance) {
@@ -98,7 +121,7 @@ app.post('/search', (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          res.send(rows);
+          getComments(res, rows);
         }
       });
   } else {
@@ -109,7 +132,7 @@ app.post('/search', (req, res) => {
           if (error) {
             res.send(error);
           } else {
-            res.send(searchResults);
+            getComments(res, searchResults);
           }
         }, connection);
       });
