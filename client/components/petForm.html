@@ -140,7 +140,61 @@
   .custom-prediction-label {
     font-style: italic;
   }
- 
+
+  .commentsBox {
+    position: absolute;
+    width: 95%;
+    z-index: 5;
+    border-bottom-right-radius: 0.25em;
+    border-bottom-left-radius: 0.25em;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+  }
+
+  .commentBox {
+      padding:10px;
+      border-top:1px dotted #bbb;
+  }
+  .commentBox .form-group:first-child, .actionBox .form-group:first-child {
+      width:80%;
+  }
+  .commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+      width:15%;
+  }
+  .actionBox .form-group * {
+      width:100%;
+  }
+  .taskDescription {
+      margin-top:10px 0;
+  }
+  .commentList {
+      padding:0;
+      list-style:none;
+      height: 145px;
+      /* max-height:180px; */
+      overflow:auto;
+  }
+  .commentList li {
+      margin:0;
+      margin-top:10px;
+  }
+  .commentList li > div {
+      display:table-cell;
+  }
+  .commentText p {
+      margin:0;
+  }
+  .sub-text {
+      color:#aaa;
+      font-family:verdana;
+      font-size:11px;
+  }
+  .actionBox {
+      border-top:1px dotted #bbb;
+       padding-top:1px;
+  }
+
 </style>
 
 <div class="container">
@@ -236,6 +290,19 @@
               </li> -->
 
                <!-- <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label style="color: white">Enter Animal Details</label>
+              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div class="input-group-addon">+</div>
+                <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
+                  rows="2" required="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <br>
+              <label style="color: white" for="inlineFormInputGroup">Enter features that apply</label>
               <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon">+</div>
                 <div>
@@ -345,28 +412,55 @@
         </div>
       </div>
     </div>
-
-
-    <div class="row">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6" ng-repeat-start="bulletin in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;"
-            ng-click="ctrl.bullClick(bulletin)">
-            <div ng-if="bulletin.user === ctrl.email">
-              <button style="float: right; padding: 2% 1%" type="button" class="close" aria-label="Close" ng-click="ctrl.deletePost(bulletin)">
-                <span style="top: 3px; right: 3px; position: absolute;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-              </button>
+  </div>
+  <div class="row">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6" ng-repeat="(bullIndex,bulletin) in ctrl.bulletinData | orderBy:'$index':true" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;">
+          <div ng-if="bulletin.user === ctrl.email">
+            <button style="float: right; padding: 2% 1%" type="button" class="close" aria-label="Close" ng-click="ctrl.deletePost(bulletin)">
+              <span style="top: 3px; right: 3px; position: absolute;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+            </button>
+          </div>
+          <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
+          <button type="button" ng-click="ctrl.bullClick(bulletin)" class="btn btn-info">Show on map</button>          
+          <button type="button" class="btn btn-info" data-toggle="collapse" data-target={{'#'+bulletin.id}} >Comments</button>
+          <!-- <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a> -->
+          <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h3>
+          <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
+            <b>{{bulletin.type}}</b>
+          </h3>
+          <div id={{bulletin.id}} class="collapse form-login commentsBox">
+            <div class="actionBox">
+              <ul class="commentList">
+                <div ng-repeat="(commentIndex, comment) in bulletin.comments">
+                    <div class="commentText">
+                        <p class="">{{comment.name}} says: <br>{{comment.message}}</p> <span class="date sub-text">{{comment.time}}</span>
+                    </div>
+                </div>
+              </ul>
+              <form class="form-inline" role="form">
+                  <div class="form-group">
+                      <input id="commentBox" ng-model="ctrl.commentText" class="form-control" type="text" placeholder="Your comments" />
+                  </div>
+                  <div class="form-group">
+                      <button ng-click="ctrl.sendComment(bulletin.id, bulletin.user, bullIndex, commentIndex)" id='commentSubmit' class="btn btn-default">Add</button>
+                  </div>
+              </form>
             </div>
-            <img style="padding: 1%;border-radius: 50px; height: 70px" ng-src="{{bulletin.userpic}}" />
-            <!-- <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a> -->
-            <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h3>
-            <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
-              <b>{{bulletin.type}}</b>
-            </h3>
-            <div style="width: 100%; height: 38px;background-color: gray">
-              <h4 style="padding-top: 7px;font-size: 19px">
-                <b>{{bulletin.date}}</b>
-              </h4>
+          </div>
+          <div style="width: 100%; height: 38px;background-color: gray">
+            <h4 style="padding-top: 7px;font-size: 19px">
+              <b>{{bulletin.date}}</b>
+            </h4>
+          </div>
+          <div ng-if="bulletin.petPic !== 'undefined'">
+            <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
+          </div>
+          <div style="height: 100px">
+            <div style="color:black;font-size: 20px;">
+              <b>Description:</b>
+              <span style="font-size: 19px"> {{bulletin.message}}</span>
             </div>
             <div ng-if="bulletin.petPic !== 'undefined'">
               <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
