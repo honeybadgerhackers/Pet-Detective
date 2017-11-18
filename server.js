@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const mysql = require('mysql');
 require('dotenv').config();
 const bodyParser = require('body-parser');
@@ -16,6 +18,11 @@ const config = {
   database: 'petdetective',
 };
 
+const httpsOptions = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem'),
+};
+
 const connection = mysql.createConnection(config);
 
 const auth = new GoogleAuth();
@@ -31,10 +38,6 @@ connection.connect((err) => {
     console.error('Error connecting to database ...', err);
   }
 });
-
-/* eslint-disable */
-app.listen(PORT, () => console.log('listening on', PORT)); 
-/* eslint-enable */
 
 const userInfo = {
   currentUser: '',
@@ -127,3 +130,10 @@ app.post('/deletePost', (req, res) => {
   });
 });
 
+/* eslint-disable */
+const server = https.createServer(httpsOptions, app)
+  .listen(PORT, () => {
+    console.log('listening on', PORT)
+  })
+// app.listen(PORT, () => console.log('listening on', PORT)); 
+/* eslint-enable */
