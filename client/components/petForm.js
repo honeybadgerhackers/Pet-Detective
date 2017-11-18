@@ -18,12 +18,14 @@ angular.module('pet-detective')
       { id: 25, text: '25 miles' },
       { id: 50, text: '50 miles' },
     ];
+    this.commentText = '';
     this.selectedSpecies = '';
     this.lostStatus = '';
     this.speciesList = ['Cat', 'Dog', 'Bird', 'Lizard', 'Snake', 'Hamster', 'Guinea pig', 'Fish', 'Other'];
     this.missingField = '';
     this.infoWindow = null;
     this.noResultText = false;
+    this.bulletinData = [];
     this.render = async function () {
       // this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -183,6 +185,26 @@ angular.module('pet-detective')
       const latLng = new google.maps.LatLng(lat, long);
       this.mymapdetail.setCenter(latLng);
       this.mymapdetail.setZoom(12);
+    };
+
+    this.sendComment = (bulletinId, postEmail, bullIndex) => {
+      if (!this.commentText.length) {
+        return;
+      }
+      const date = new Date().toString();
+      const data = {
+        comment: this.commentText,
+        senderEmail: this.email,
+        postId: bulletinId,
+        time: date,
+        name: this.profileName,
+        postEmail,
+      };
+      $http.post('/comments', data)
+        .then((comments) => {
+          this.bulletinData[bullIndex].comments = comments;
+          this.commentText = '';
+        });
     };
 
     this.deletePost = (bully) => {
