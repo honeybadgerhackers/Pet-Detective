@@ -25,6 +25,7 @@ angular.module('pet-detective')
     this.missingField = '';
     this.infoWindow = null;
     this.noResultText = false;
+    this.bulletinData = [];
     this.render = async function () {
       // this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
@@ -186,7 +187,7 @@ angular.module('pet-detective')
       this.mymapdetail.setZoom(12);
     };
 
-    this.sendComment = (bulletinId, postEmail) => {
+    this.sendComment = (bulletinId, postEmail, bullIndex) => {
       if (!this.commentText.length) {
         return;
       }
@@ -200,9 +201,8 @@ angular.module('pet-detective')
         postEmail,
       };
       $http.post('/comments', data)
-        .then(formDataFactory.fetchFormData)
-        .then((bulletins) => {
-          this.bulletinData = bulletins;
+        .then((comments) => {
+          this.bulletinData[bullIndex].comments = comments;
           this.commentText = '';
         });
     };
