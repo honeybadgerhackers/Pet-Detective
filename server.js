@@ -69,16 +69,6 @@ app.get('/bulletin', (req, res) => {
   });
 });
 
-app.post('/comments', (req, res) => {
-  const { comment, senderEmail, postId, time, name } = req.body;
-  connection.query(`insert into comments (postId, name, message, time, senderEmail) values ('${postId}', '${name}', '${comment}', '${time}', '${senderEmail}')`, (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
-  res.sendStatus(201);
-});
-
 app.post('/bulletin', (req, res) => {
   connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err, /* rows, fields */) {
     if (err) {
@@ -101,7 +91,6 @@ const getComments = (res, posts) => {
       prev[current.postId].push(current);
       return prev;
     }, {});
-
     posts.forEach((e) => {
       if (objectRows[e.id]) {
         e.comments = objectRows[e.id].reverse();
@@ -110,6 +99,23 @@ const getComments = (res, posts) => {
     res.send(posts);
   });
 };
+
+app.post('/comments', (req, res) => {
+  const { comment, senderEmail, postId, time, name } = req.body;
+  connection.query(`insert into comments (postId, name, message, time, senderEmail) values ('${postId}', '${name}', '${comment}', '${time}', '${senderEmail}')`, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      connection.query(`select * from comments where postId = ${postId}`, (error, comments) => {
+        if (error) {
+          console.error(error);
+        } else {
+          res.send(comments);
+        }
+      });
+    }
+  });
+});
 
 app.post('/search', (req, res) => {
   const { searchField: searchText, distance } = req.body;
