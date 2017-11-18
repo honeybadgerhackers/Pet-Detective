@@ -169,7 +169,7 @@
         <input g-places-autocomplete ng-model="ctrl.searchTerm" type="text" class="form-control loc-input-field fap-field" placeholder="Search Location"/>
       </div>
       <div class="col-xs-4">
-        <select id="fap-type" name="animal" class="form-control">
+        <select id="fap-type" name="animal" class="form-control" ng-model="ctrl.searchAnimalType">
           <option value="" class="any">Any</option>
           <option value="dog" class="pet dog">Dog</option>
           <option value="cat" class="pet cat">Cat</option>
@@ -182,12 +182,17 @@
         </select>
       </div>
       <div class="col-xs-4">
-        <tags-input ng-model="ctrl.tags" placeholder="Seperate tags with a comma">
+        <tags-input ng-model="ctrl.searchTags" placeholder="Seperate tags with a comma">
           <auto-complete source="ctrl.loadTags()"></auto-complete>
         </tags-input>
       </div>
     </div>
   </div>
+  <span class="input-group-btn">
+    <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchAnimalType, ctrl.searchTags, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
+      <i class="glyphicon glyphicon-search"></i>
+    </button>
+  </span>
 
         <!-- ng-model="ctrl.searchTerm" -->
           <!-- <fieldset> -->

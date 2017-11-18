@@ -24,21 +24,29 @@ angular.module('pet-detective')
     this.missingField = '';
     this.infoWindow = null;
     this.noResultText = false;
+
     this.render = async function () {
       // this.bulletinData = await formDataFactory.fetchFormData();
       this.createMap();
       // return this.bulletinData;
     };
 
-    this.fetchSearchResults = function (search, distance, initialSearch) {
-      if (search) {
+    // this.checkAnimalType = function (searchLocation, searchAnimalType, searchTags, searchDistance) {
+    //   console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
+    // };
+
+    this.fetchSearchResults = function (searchLocation, searchAnimalType, searchTags, searchDistance, initialSearch) {
+      console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
+      if (searchLocation) {
         this.noResultText = false;
         return $http({
           url: '/search',
           method: 'POST',
           data: {
-            searchField: search,
-            distance,
+            searchLocation,
+            searchDistance,
+            searchAnimalType,
+            searchTags,
           },
         })
           .then(({ data }) => {
@@ -170,7 +178,7 @@ angular.module('pet-detective')
             lat: latitude,
             lng: longitude,
           };
-          this.fetchSearchResults(`${latitude}, ${longitude}`, 10, true);
+          this.fetchSearchResults(`${latitude}, ${longitude}`, null, null, 10, true);
           this.mymapdetail.setCenter(pos);
           this.mymapdetail.setZoom(12);
         }, geoError);

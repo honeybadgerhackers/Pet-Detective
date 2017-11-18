@@ -87,11 +87,12 @@ app.post('/bulletin', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const { searchField: searchText, distance } = req.body;
-  if (!distance) {
+  const { searchLocation, searchDistance, searchAnimalType, searchTags } = req.body;
+  // console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
+  if (!searchDistance) {
     connection.query(
       `select * from petpost where 
-      address like '%${searchText}%'`,
+      address like '%${searchLocation}%'`,
       (err, rows) => {
         if (err) {
           res.send(err);
@@ -100,10 +101,11 @@ app.post('/search', (req, res) => {
         }
       });
   } else {
-    utilities.getCoords(searchText, GOOGLE_API_KEY)
+    utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
+        // console.log(result);
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-        utilities.radiusSearch(lat, lng, distance, (error, searchResults) => {
+        utilities.radiusSearch(lat, lng, searchDistance, (error, searchResults) => {
           if (error) {
             res.send(error);
           } else {
