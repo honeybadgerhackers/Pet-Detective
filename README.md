@@ -34,6 +34,19 @@ And create a comments table with the following
 
 `create table comments (postId varchar(20) NOT NULL, name varchar(20) NOT NULL, message varchar(300), time varchar(75), senderEmail varchar(75) NOT NULL);`
 
+If you plan on using the email feature, you'll need to include a
+
+IP //server's ip
+PORT //server's port
+EMAIL_USER //websites email
+EMAIL_PASS //websites password
+
+in your env file
+
+The server is set to use smpt and ports for google emails. if you want to change that you'll need to change
+the host and port in the server.js file.
+
+
 ## Installing Dependencies
 
 ### From within the root directory:
