@@ -46,7 +46,10 @@ angular.module('pet-detective')
           .then(({ data }) => {
             if (data.length) {
               this.bulletinData = data;
+              const [lat, long] = this.bulletinData[0].latlong.split(',');
+              const latLng = new google.maps.LatLng(lat, long);
               this.removeMarkers();
+              this.mymapdetail.setCenter(latLng);
               this.placeMarkers();
             } else {
               this.noResultText = true;
