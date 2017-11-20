@@ -1,7 +1,7 @@
-<script src="//code.jquery.com/jquery-1.11.0.min.js">
-</script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
 <link rel="stylesheet" href="./style/ng-tags-input.min.css">
 <link rel="stylesheet" href="./style/ng-tags-input.bootstrap.min.css">
 <style>
@@ -194,120 +194,134 @@
       border-top:1px dotted #bbb;
        padding-top:1px;
   }
+  .form-label {
+    font-size: 12px;
+  }
 
 </style>
 
 <div class="container">
   <div style="font-family: Roboto, sans-serif;" id="addNew">
-    <span style="color: white;">Distance: </span>
+    <br>
     <div class="row">
-      <div class="col-xs-3" style="padding-bottom: 5px;">
-        <select class="form-control" ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
-        </select>
+      <div class="col-xs-6">
+        <input g-places-autocomplete ng-model="ctrl.searchTerm" type="text" class="form-control loc-input-field fap-field" placeholder="Search Location"/>
       </div>
-      <div class="col-xs-9">
-        <h2 ng-show="ctrl.noResultText" style="color: white;">
-          <span class="label label-info" style="padding-bottom: 2px;">
-            <i>No results!</i>
-          </span>
-        </h2>
+      <div class="col-xs-6">
+        <tags-input ng-model="ctrl.searchTags" placeholder="Seperate tags with a comma">
+          <auto-complete source="ctrl.loadTags()"></auto-complete>
+        </tags-input>
       </div>
     </div>
-      <div id="custom-search-input">
-      <div class="input-group">
-          <input ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"/>
-            <span class="input-group-btn">
-            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
-              <i class="glyphicon glyphicon-search"></i>
-            </button>
-          </span>
-        </div>
-      </div>
+    <br>    
+    <div class="row">
+      <div class="col-xs-6" style="padding-bottom: 5px;">
+        <select class="form-control" ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
+        </select>
+      </div>      
+      <div class="col-xs-6">
+        <select class="form-control" id="fap-type" name="animal"  ng-model="ctrl.searchAnimalType">
+          <option value="" class="any">Animal Type</option>
+          <option value="dog" class="pet dog">Dog</option>
+          <option value="cat" class="pet cat">Cat</option>
+          <option value="rabbit" class="pet rabbit">Rabbit</option>
+          <option value="smallFurry" class="pet small-furry">Small &amp; Furry</option>
+          <option value="horse" class="pet horse">Horse</option>
+          <option value="bird" class="pet birds">Bird</option>
+          <option value="scalesFinsOther" class="pet reptile">Scales, Fins &amp; Others</option>
+          <option value="barnyard" class="pet barnyard">Barnyard</option>
+        </select>
+      </div>      
+    </div>
   </div>
-  <div class="row">
-    <div ng-init="ctrl.render()">
-      <div ng-controller="dispatchController">
-        <div style="border: 3px solid #008000;" id="demo" class="collapse form-login">
-          <form name="myForm">
-            <h4 style="font-family: Zilla Slab">Give Us Some Clues</h4>
-            <label style="color: white" for="lostOrFound" required=""> Choose Lost or Found: </label>
-            <br>
-            <select name="lostOrFound" ng-model="ctrl.lostStatus">
-              <option value="Lost">Lost</option>
-              <option value="Found">Found</option>
+  <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchAnimalType, ctrl.searchTags, ctrl.searchDistance.id)"
+   type="button" class="btn btn-primary btn-lg btn-block">Search</button>
+  <br>
+    <div class="row">
+      <div ng-init="ctrl.render()">
+        <div ng-controller="dispatchController">
+          <div style="border: 3px solid #008000;" id="demo" class="collapse form-login">
+            <form name="myForm">
+              <h4 style="font-family: Zilla Slab">Give Us Some Clues</h4>
+              <label style="color: white" for="lostOrFound" required=""> Choose Lost or Found: </label>
               <br>
-            </select>
-            <tt style="color: white">{{ctrl.lostStatus}} Pet</tt>
-            <br>
-            <br>
-            <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
-            <br>
-            <select ng-model="ctrl.selectedSpecies" ng-options="type for type in ctrl.speciesList"></select>
-            <tt style="color: white"> Type of Pet: {{ctrl.selectedSpecies}}</tt>
-            <div class="form-group">
+              <select name="lostOrFound" ng-model="ctrl.lostStatus">
+                <option value="Lost">Lost</option>
+                <option value="Found">Found</option>
+                <br>
+              </select>
+              <tt style="color: white">{{ctrl.lostStatus}} Pet</tt>
               <br>
-              <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
-              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <div class="input-group-addon">+</div>
-                <div>
-                  <input type="text" id="address" required="" g-places-autocomplete ng-model="ctrl.place" id="searchTextField" class="form-control input-large chat-input"
-                    placeholder="Start Typing Address..." />
+              <br>
+              <label style="color: white" style="color: white" for="singleSelect"> Choose Animal Type: </label>
+              <br>
+              <select ng-model="ctrl.selectedSpecies" ng-options="type for type in ctrl.speciesList"></select>
+              <tt style="color: white"> Type of Pet: {{ctrl.selectedSpecies}}</tt>
+              <div class="form-group">
+                <br>
+                <label style="color: white" for="inlineFormInputGroup">Last Seen: Enter Address or Nearby Business</label>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                  <div class="input-group-addon">+</div>
+                  <div>
+                    <input type="text" id="address" required="" g-places-autocomplete ng-model="ctrl.place" id="searchTextField" class="form-control input-large chat-input"
+                      placeholder="Start Typing Address..." />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group">
-              <label style="color: white">Enter Animal Details</label>
-              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <div class="input-group-addon">+</div>
-                <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
-                  rows="2" required="" />
-              </div>
-            </div>
-            <div class="form-group">
-              <br>
-              <label style="color: white" for="inlineFormInputGroup">Enter features that apply</label>
-              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <div class="input-group-addon">+</div>
-                <div>
-                  <tags-input ng-model="ctrl.tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) ">
-                    <auto-complete source="ctrl.loadTags()"></auto-complete>
-                  </tags-input>
+              <div class="form-group">
+                <label style="color: white">Enter Animal Details</label>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                  <div class="input-group-addon">+</div>
+                  <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
+                    rows="2" required="" />
                 </div>
               </div>
-            </div>
-            <div ng-init="imgSrc" ng-model="ctrl.img">{{ctrl.img}}</div>
-            <br>
-            <a href="#" id="upload_widget_opener" style="color:white">Upload a Picture of Your Pet</a>
-            <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-            <script type="text/javascript">
-              document.getElementById("upload_widget_opener").addEventListener("click", function () {
-                cloudinary.openUploadWidget({
-                    cloud_name: 'rose8190',
-                    upload_preset: 'ipcueltn'
-                  },
-                  function (error, result) {
-                    console.log(error, result, 'upload info')
-                    window.imgSrc = result[0].secure_url;
-                    img = result[0].secure_url;
-                    console.log(window.imgSrc, 'in petform.html');
-                  });
-              }, false);
-            </script>
-            <img ng-src={{$window.imgSrc}} />
-            </br>
-            <br>
-            <div ng-if="ctrl.missingField" style="color: rgb(178,0,89)">
-              {{ctrl.missingField}}
-            </div>
-            <div class="wrapper">
-              <span class="group-btn">
-                <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date)"
-                  href="#" style="margin-top: 3%" class="btn btn-primary btn-md">Submit Bulletin
-                  <i class="fa fa-sign-in"></i>
-                </a>
-              </span>
-            </div>
-          </form>
+              <div class="form-group">
+                <br>
+                <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                  <div class="input-group-addon">+</div>
+                  <div>
+                    <tags-input ng-model="ctrl.tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) ">
+                      <auto-complete source="ctrl.loadTags()"></auto-complete>
+                    </tags-input>
+                  </div>
+                </div>
+              </div>
+              <div ng-init="imgSrc" ng-model="ctrl.img">{{ctrl.img}}</div>
+              <br>
+              <a href="#" id="upload_widget_opener" style="color:white">Upload a Picture of Your Pet</a>
+              <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+              <script type="text/javascript">
+                document.getElementById("upload_widget_opener").addEventListener("click", function () {
+                  cloudinary.openUploadWidget({
+                      cloud_name: 'rose8190',
+                      upload_preset: 'ipcueltn'
+                    },
+                    function (error, result) {
+                      console.log(error, result, 'upload info')
+                      window.imgSrc = result[0].secure_url;
+                      img = result[0].secure_url;
+                      console.log(window.imgSrc, 'in petform.html');
+                    });
+                }, false);
+              </script>
+              <img ng-src={{$window.imgSrc}} />
+              </br>
+              <br>
+              <div ng-if="ctrl.missingField" style="color: rgb(178,0,89)">
+                {{ctrl.missingField}}
+              </div>
+              <div class="wrapper">
+                <span class="group-btn">
+                  <a style="width: 100%" ng-disable="!myForm.$valid" ng-click="ctrl.submit(ctrl.address, ctrl.formBody, window.imgSrc, window.date)"
+                    href="#" style="margin-top: 3%" class="btn btn-primary btn-md">Submit Bulletin
+                    <i class="fa fa-sign-in"></i>
+                  </a>
+                </span>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -361,30 +375,40 @@
               <b>Description:</b>
               <span style="font-size: 19px"> {{bulletin.message}}</span>
             </div>
-            <div style="color: black; font-size: 19px;">
+            <div ng-if="bulletin.petPic !== 'undefined'">
+              <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
+            </div>
+            <div style="height: 100px">
+              <div style="color:black;font-size: 20px;">
+                <b>Description:</b>
+                <span style="font-size: 19px"> {{bulletin.message}}</span>
+              </div>
+              <div style="color: black; font-size: 19px;">
+                <b>
+                  Features:
+                </b>
+                {{bulletin.styles}}
+              </div>
+            </div>
+            <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;">
               <b>
-                Features:
+                {{bulletin.lostOrFound}} Near:
               </b>
-              {{bulletin.styles}}
+              {{bulletin.address}}
             </div>
           </div>
-          <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;">
-            <b>
-              {{bulletin.lostOrFound}} Near:
-            </b>
-            {{bulletin.address}}
-          </div>
+          <div ng-repeat-end=""></div>
         </div>
       </div>
       <dir-pagination-controls></dir-pagination-controls>
     </div>
-  </div>
-  <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body">
-          <img src="" id="imagepreview" style="width: 100%; height: auto">
+    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <img src="" id="imagepreview" style="width: 100%; height: auto">
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </div>f
+</div>
