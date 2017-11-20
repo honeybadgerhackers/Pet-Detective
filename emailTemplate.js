@@ -1,6 +1,3 @@
-require('dotenv').config();
-
-const { PORT, SERVER_IP } = process.env;
 const html = `
 <table>
     <tr>
@@ -13,14 +10,9 @@ const html = `
         <td style="background-color: #008000; width:90%; height: 40%; text-align: center;">
             <h1 style='color: white;'>You have a new comment on your post
                 <br>
-                <a href="http://${SERVER_IP}:${PORT}" style="color: white; font-family:Zilla Slab, serif;">click here to go there now</a>
+                <a href="http://pet-detective.gq" style="color: white; font-family:Zilla Slab, serif;">click here to go there now</a>
             </h1>
         </td>
-    </tr>
-    <tr>
-        <!-- <td align="center">
-            <a href="${SERVER_IP}:${PORT}"> Or click here to unsubscribe </a>
-        </td> -->
     </tr>
 </table>`;
 

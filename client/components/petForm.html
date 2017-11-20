@@ -367,14 +367,6 @@
               <b>{{bulletin.date}}</b>
             </h4>
           </div>
-          <div ng-if="bulletin.petPic !== 'undefined'">
-            <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
-          </div>
-          <div style="height: 100px">
-            <div style="color:black;font-size: 20px;">
-              <b>Description:</b>
-              <span style="font-size: 19px"> {{bulletin.message}}</span>
-            </div>
             <div ng-if="bulletin.petPic !== 'undefined'">
               <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
             </div>
@@ -410,5 +402,5 @@
           </div>
         </div>
       </div>
-    </div>f
+    </div>
 </div>
