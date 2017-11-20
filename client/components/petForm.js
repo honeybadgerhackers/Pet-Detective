@@ -31,7 +31,12 @@ angular.module('pet-detective')
       this.createMap();
       // return this.bulletinData;
     };
-    this.fetchSearchResults = function (searchLocation, searchAnimalType, searchTags, searchDistance, initialSearch) {
+    this.fetchSearchResults = function (
+      searchLocation,
+      searchAnimalType,
+      searchTags,
+      searchDistance,
+      initialSearch) {
       if (searchLocation) {
         this.noResultText = false;
         return $http({
@@ -205,7 +210,7 @@ angular.module('pet-detective')
         postEmail,
       };
       $http.post('/comments', data)
-        .then((comments) => {
+        .then(() => {
           this.bulletinData[bullIndex].comments = comments;
           this.commentText = '';
         });

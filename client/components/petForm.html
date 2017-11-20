@@ -143,6 +143,7 @@
 
   .commentsBox {
     position: absolute;
+    background-color: #5c605a;
     width: 95%;
     z-index: 5;
     border-bottom-right-radius: 0.25em;
@@ -150,6 +151,10 @@
     padding-top: 0;
     padding-bottom: 0;
     padding-right: 0;
+    /* height: 10.5em; */
+    margin-left: 5px;
+    margin-right: 5px;
+
   }
 
   .commentBox {
@@ -171,7 +176,7 @@
   .commentList {
       padding:0;
       list-style:none;
-      height: 145px;
+      height: 10.5em;
       /* max-height:180px; */
       overflow:auto;
   }
@@ -192,7 +197,7 @@
   }
   .actionBox {
       border-top:1px dotted #bbb;
-       padding-top:1px;
+      padding-top:1px;
   }
   .form-label {
     font-size: 12px;
@@ -235,7 +240,7 @@
     </div>
   </div>
   <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchAnimalType, ctrl.searchTags, ctrl.searchDistance.id)"
-   type="button" class="btn btn-primary btn-lg btn-block">Search</button>
+   type="button" class="btn btn-info btn-lg btn-block">Search</button>
   <br>
     <div class="row">
       <div ng-init="ctrl.render()">
@@ -329,7 +334,7 @@
   <div class="row">
     <div class="container">
       <div class="row">
-        <div class="col-md-6" dir-paginate="(bullIndex,bulletin) in ctrl.bulletinData | orderBy:'$index':true | itemsPerPage: 10" style="background-color:lightgray;color: white; height:auto; border: 3px solid #008000;">
+        <div class="col-md-6" dir-paginate="(bullIndex,bulletin) in ctrl.bulletinData | orderBy:'$index':true | itemsPerPage: 10" style="background-color:lightgray;color: white; min-height: 275px; border: 3px solid #008000; padding: 0px; position: relative">
           <div ng-if="bulletin.user === ctrl.email">
             <button style="float: right; padding: 2% 1%" type="button" class="close" aria-label="Close" ng-click="ctrl.deletePost(bulletin)">
               <span style="top: 3px; right: 3px; position: absolute;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
@@ -339,10 +344,10 @@
           <button type="button" ng-click="ctrl.bullClick(bulletin)" class="btn btn-info">Show on map</button>          
           <button type="button" class="btn btn-info" data-toggle="collapse" data-target={{'#'+bulletin.id}} >Comments</button>
           <!-- <a id="email" ng-href="mailto:{{bulletin.user}}">Send email</a> -->
-          <h3 style="color: green;clear:left; float: right">{{bulletin.lostOrFound}}</h3>
-          <h3 style="margin-right: 5px; float:right; color: rgb(178,0,89)">
+          <h4 style="border-bottom-width: 0px; color: green;clear:left; margin-right: 6px; float: right">{{bulletin.lostOrFound}}</h4>
+          <h4 style="border-bottom-width: 0px; overflow: hidden; margin-right: 4px; float:right; color: rgb(178,0,89)">
             <b>{{bulletin.type}}</b>
-          </h3>
+          </h4>
           <div id={{bulletin.id}} class="collapse form-login commentsBox">
             <div class="actionBox">
               <ul class="commentList">
@@ -367,22 +372,30 @@
               <b>{{bulletin.date}}</b>
             </h4>
           </div>
-            <div ng-if="bulletin.petPic !== 'undefined'">
-              <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
-            </div>
-            <div style="height: 100px">
-              <div style="color:black;font-size: 20px;">
-                <b>Description:</b>
-                <span style="font-size: 19px"> {{bulletin.message}}</span>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-xs-9">
+                <div style="min-height: 100px">
+                  <div style="color:black;font-size: 18px;">
+                    <b>Description:</b>
+                    <span style="font-size: 18px"> {{bulletin.message}}</span>
+                  </div>
+                  <div style="color: black; font-size: 17px;">
+                    <b>
+                      Features:
+                    </b>
+                    {{bulletin.styles}}
+                  </div>
+                </div>
               </div>
-              <div style="color: black; font-size: 19px;">
-                <b>
-                  Features:
-                </b>
-                {{bulletin.styles}}
+              <div class="col-xs-3">
+                <div ng-if="bulletin.petPic !== 'undefined'">
+                  <img src="{{bulletin.petPic}}" style="height:100px;width: auto;float:right;" ng-click="ctrl.modal(bulletin.petPic)" />
+                </div>
               </div>
             </div>
-            <div style="padding: 5px; max-height: 25%; background-color: gray;font-size: 19px; color: white;">
+          </div>
+            <div style="padding: 5px; width: 100%; max-height: 25%; background-color: gray;font-size: 17px; color: white; position: absolute; bottom: 0;">
               <b>
                 {{bulletin.lostOrFound}} Near:
               </b>

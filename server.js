@@ -163,7 +163,7 @@ app.post('/search', (req, res) => {
   if (!searchDistance) {
     connection.query(
       `select * from petpost where 
-      address like '%${searchLocation}%'`,
+      address like '%${searchLocation}% ORDER BY id'`,
       (err, rows) => {
         if (err) {
           res.send(err);
