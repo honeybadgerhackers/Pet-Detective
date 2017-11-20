@@ -13,8 +13,8 @@ module.exports = {
     return request(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${GOOGLE_API_KEY}`);
   },
 
-  radiusSearch(lat, lng, dist, callback, connection) {
-    connection.query(`SELECT *, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', -1) ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) ) ) AS distance FROM petpost HAVING (distance < ${dist}) ORDER BY id;`, (err, rows) => {
+  radiusSearch(lat, lng, dist, searchTags, searchAnimalType, callback, connection) {
+    connection.query(`SELECT *, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', -1) ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) ) ) AS distance FROM petpost HAVING (distance < ${dist}) AND (styles LIKE '%${searchTags[0].text}%' AND type LIKE '%${searchAnimalType}%')ORDER BY id;`, (err, rows) => {
       if (err) {
         callback(err, null);
       } else {

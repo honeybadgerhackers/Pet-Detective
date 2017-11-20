@@ -160,13 +160,15 @@ app.post('/comments', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const { searchLocation, searchDistance, searchAnimalType } = req.body;
-  let { searchTags } = req.body;
+  const { searchLocation, searchDistance } = req.body;
+  let { searchTags, searchAnimalType } = req.body;
   if (!searchTags || Array.isArray(searchTags) && searchTags.length === 0) {
-    searchTags = [{ text: null }];
+    searchTags = [{ text: '' }];
+  }
+  if (searchAnimalType === null) {
+    searchAnimalType = '';
   }
   const tagList = `'${searchTags.map(e => e.text).join("','")}'`;
-  console.log(tagList, searchAnimalType);
 
   const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' AND type LIKE '%${searchAnimalType}%') ORDER BY id;`;
   if (!searchDistance) {
@@ -183,7 +185,7 @@ app.post('/search', (req, res) => {
     utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-        utilities.radiusSearch(lat, lng, searchDistance, (error, searchResults) => {
+        utilities.radiusSearch(lat, lng, searchDistance, searchTags, searchAnimalType, (error, searchResults) => {
           if (error) {
             res.send(error);
           } else {
