@@ -165,7 +165,6 @@ app.post('/search', (req, res) => {
     searchTags = [{ text: '' }];
   }
   const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' OR type LIKE '%${searchAnimalType}%') ORDER BY id;`;
-  // console.log(searchQuery);
   if (!searchDistance) {
     connection.query(
       searchQuery,
