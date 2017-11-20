@@ -159,11 +159,13 @@ app.post('/comments', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const { searchLocation, searchDistance, searchAnimalType, searchTags } = req.body;
+  const { searchLocation, searchDistance, searchAnimalType = '*', searchTags } = req.body;
+
+  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' OR type LIKE '%${searchAnimalType}%') ORDER BY id;`;
+  // console.log(searchQuery);
   if (!searchDistance) {
     connection.query(
-      `select * from petpost where 
-      address like '%${searchLocation}% ORDER BY id'`,
+      searchQuery,
       (err, rows) => {
         if (err) {
           res.send(err);
