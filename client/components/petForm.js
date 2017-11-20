@@ -11,7 +11,7 @@ angular.module('pet-detective')
     this.img = null;
     this.tags = [];
     this.selectDistance = [
-      { id: null, text: 'none' },
+      { id: null, text: 'Select Distance' },
       { id: 2, text: '2 miles' },
       { id: 5, text: '5 miles' },
       { id: 10, text: '10 miles' },
@@ -31,13 +31,7 @@ angular.module('pet-detective')
       this.createMap();
       // return this.bulletinData;
     };
-
-    // this.checkAnimalType = function (searchLocation, searchAnimalType, searchTags, searchDistance) {
-    //   console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
-    // };
-
     this.fetchSearchResults = function (searchLocation, searchAnimalType, searchTags, searchDistance, initialSearch) {
-      console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
       if (searchLocation) {
         this.noResultText = false;
         return $http({

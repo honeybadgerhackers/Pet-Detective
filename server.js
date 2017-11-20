@@ -16,40 +16,16 @@ const config = {
   database: 'petdetective',
 };
 
-console.warn(
-  PORT,
-  DB,
-  DB_USER,
-  DB_PASSWORD,
-  OAUTH_ID,
-  MY_SECRET
-);
-console.warn('Hello WOrlds');
 const connection = mysql.createConnection({
   host: DB,
   user: DB_USER,
   password: DB_PASSWORD,
   database: 'petdetective',
 });
-// const pool = mysql.createPool({
-//   host,
-//   user,
-//   password,
-//   database: 'petdetective',
-// });
-// pool.getConnection(function (err, conn) {
-//   if (err) {
-//     console.error(err);
-//   }
-//   conn.query('select * from petpost', function (error /* , results, fields */) {
-//     console.warn(err || `succesfully queryied petpost at ${host}`);
-//   });
-// });
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2(OAUTH_ID, '', '');
 
-// console.log(auth);
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -145,7 +121,6 @@ app.post('/comments', (req, res) => {
 
 app.post('/search', (req, res) => {
   const { searchLocation, searchDistance, searchAnimalType, searchTags } = req.body;
-  // console.log(searchLocation, searchAnimalType, searchTags, searchDistance);
   if (!searchDistance) {
     connection.query(
       `select * from petpost where 
@@ -174,7 +149,6 @@ app.post('/search', (req, res) => {
 });
 
 app.post('/tokensignin', function (req, res) {
-  console.log('AM I WORKING?');
   client.verifyIdToken(
     req.body.idtoken,
     OAUTH_ID,

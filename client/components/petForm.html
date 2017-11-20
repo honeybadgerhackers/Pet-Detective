@@ -194,37 +194,34 @@
       border-top:1px dotted #bbb;
        padding-top:1px;
   }
+  .form-label {
+    font-size: 12px;
+  }
 
 </style>
 
 <div class="container">
   <div style="font-family: Roboto, sans-serif;" id="addNew">
-    <span style="color: white;">Distance: </span>
-
-
+    <br>
     <div class="row">
-      <div class="col-xs-3" style="padding-bottom: 5px;">
-        <select class="form-control" ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
-        </select>
-      </div>
-      <div class="col-xs-9">
-        <h2 ng-show="ctrl.noResultText" style="color: white;">
-          <span class="label label-info" style="padding-bottom: 2px;">
-            <i>No results!</i>
-          </span>
-        </h2>
-      </div>
-    </div>
-
-
-    
-    <div class="row">
-      <div class="col-xs-4">
+      <div class="col-xs-6">
         <input g-places-autocomplete ng-model="ctrl.searchTerm" type="text" class="form-control loc-input-field fap-field" placeholder="Search Location"/>
       </div>
-      <div class="col-xs-4">
-        <select id="fap-type" name="animal" class="form-control" ng-model="ctrl.searchAnimalType">
-          <option value="" class="any">Any</option>
+      <div class="col-xs-6">
+        <tags-input ng-model="ctrl.searchTags" placeholder="Seperate tags with a comma">
+          <auto-complete source="ctrl.loadTags()"></auto-complete>
+        </tags-input>
+      </div>
+    </div>
+    <br>    
+    <div class="row">
+      <div class="col-xs-6" style="padding-bottom: 5px;">
+        <select class="form-control" ng-init="ctrl.searchDistance = ctrl.selectDistance[0]" ng-model="ctrl.searchDistance" ng-options="distance as distance.text for distance in ctrl.selectDistance track by distance.id">
+        </select>
+      </div>      
+      <div class="col-xs-6">
+        <select class="form-control" id="fap-type" name="animal"  ng-model="ctrl.searchAnimalType">
+          <option value="" class="any">Animal Type</option>
           <option value="dog" class="pet dog">Dog</option>
           <option value="cat" class="pet cat">Cat</option>
           <option value="rabbit" class="pet rabbit">Rabbit</option>
@@ -234,96 +231,12 @@
           <option value="scalesFinsOther" class="pet reptile">Scales, Fins &amp; Others</option>
           <option value="barnyard" class="pet barnyard">Barnyard</option>
         </select>
-      </div>
-      <div class="col-xs-4">
-        <tags-input ng-model="ctrl.searchTags" placeholder="Seperate tags with a comma">
-          <auto-complete source="ctrl.loadTags()"></auto-complete>
-        </tags-input>
-      </div>
+      </div>      
     </div>
   </div>
-  <span class="input-group-btn">
-    <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchAnimalType, ctrl.searchTags, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
-      <i class="glyphicon glyphicon-search"></i>
-    </button>
-  </span>
-
-        <!-- ng-model="ctrl.searchTerm" -->
-          <!-- <fieldset> -->
-            <!-- <ul class="petSearch-filter">
-              <li>
-                <label for="location">Location</label>
-                <div class="input-wrap input-wrap_fill m-input-wrap_medium">
-                  <div class="styled-text-input">
-                    <input type="text" id="location" class="loc-input-field fap-field" name="location" placeholder="Ex: Atlanta, GA or 30303" required="required" title="Location is required.">
-                    <input g-places-autocomplete ng-model="ctrl.searchTerm" type="text" class="loc-input-field fap-field" placeholder="Search"/>
-                  </div>
-                </div>
-              </li>
-              <li class="petSearch-filter-param">
-                <label for="fap-type">Type</label>
-                <div class="input-wrap input-wrap_fill m-input-wrap_medium">
-                  <div class="styled-select">
-                      <select id="fap-type" name="animal" class="fap-type pet-types fap-field">
-                          <option value="" class="any">Any</option>
-                          <option value="dog" class="pet dog">Dog</option>
-                          <option value="cat" class="pet cat">Cat</option>
-                          <option value="rabbit" class="pet rabbit">Rabbit</option>
-                          <option value="smallFurry" class="pet small-furry">Small &amp; Furry</option>
-                          <option value="horse" class="pet horse">Horse</option>
-                          <option value="bird" class="pet birds">Bird</option>
-                          <option value="scalesFinsOther" class="pet reptile">Scales, Fins &amp; Others</option>
-                          <option value="barnyard" class="pet barnyard">Barnyard</option>
-                      </select>
-                  </div>
-                </div>
-              </li>
-              <li class="petSearch-filter-param">
-                <label for="fap-breed-id">Enter Pet Features</label>
-                <div class="input-wrap input-wrap_fill m-input-wrap_medium">
-                  <div class="styled-text-input">                            
-                    <tags-input ng-model="ctrl.tags" class="form-control ti-input-large chat-input" placeholder="Seperate tags with a comma">
-                      <auto-complete source="ctrl.loadTags()"></auto-complete>
-                    </tags-input>
-                  </div>
-                </div>
-              </li> -->
-
-               <!-- <label style="color: white" for="inlineFormInputGroup">Enter tags that apply</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label style="color: white">Enter Animal Details</label>
-              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <div class="input-group-addon">+</div>
-                <textarea style="height: 50px;" ng-model="ctrl.formBody" id="userPassword" class="form-control input-sm chat-input" placeholder="Animal Details"
-                  rows="2" required="" />
-              </div>
-            </div>
-            <div class="form-group">
-              <br>
-              <label style="color: white" for="inlineFormInputGroup">Enter features that apply</label>
-              <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                <div class="input-group-addon">+</div>
-                <div>
-                  <tags-input ng-model="ctrl.tags" class="form-control ti-input-large chat-input" placeholder="Seperate with , (male, red) ">
-                    <auto-complete source="ctrl.loadTags()"></auto-complete>
-                  </tags-input>
-                </div>
-              </div>
- -->
-
-            <!-- <ul/> -->
-
-          <!-- </fieldset> -->
-            <!-- <input g-places-autocomplete ng-model="ctrl.searchTerm" type="text" class="form-control input-lg" placeholder="Search Pets by Zipcode, Neighborhood, etc"/>
-            <span class="input-group-btn">
-            <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchDistance.id)" class="btn btn-info btn-lg" type="button">
-              <i class="glyphicon glyphicon-search"></i>
-            </button>
-          </span> -->
-
-
+  <button ng-click="ctrl.fetchSearchResults(ctrl.searchTerm, ctrl.searchAnimalType, ctrl.searchTags, ctrl.searchDistance.id)"
+   type="button" class="btn btn-primary btn-lg btn-block">Search</button>
+  <br>
     <div class="row">
       <div ng-init="ctrl.render()">
         <div ng-controller="dispatchController">
@@ -488,8 +401,6 @@
         </div>
       </div>
     </div>
-
-
     <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -498,7 +409,5 @@
           </div>
         </div>
       </div>
-    </div>
-
-
+    </div>f
 </div>
