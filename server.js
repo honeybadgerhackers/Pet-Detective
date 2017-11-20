@@ -7,9 +7,31 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const GoogleAuth = require('google-auth-library');
 const utilities = require('./utils/searchUtils');
+const { html } = require('./emailTemplate');
 
 const app = express();
-const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY } = process.env;
+const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY, EMAIL_USER, EMAIL_PASS } = process.env;
+const nodemailer = require('nodemailer');
+
+const poolConfig = {
+  // pool: true,
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // use TLS
+  auth: {
+    user: `${EMAIL_USER}`,
+    pass: `${EMAIL_PASS}`,
+  },
+};
+
+const transporter = nodemailer.createTransport(poolConfig);
+transporter.verify((err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.info('SMTP CONNECTED');
+  }
+});
 
 
 const config = {
@@ -45,7 +67,6 @@ const userInfo = {
   currentUser: '',
   photo: '',
 };
-
 
 app.get('/bulletin', (req, res) => {
   connection.query('select * from petpost', (err, posts) => {
@@ -84,6 +105,17 @@ app.post('/bulletin', (req, res) => {
   res.sendStatus(201);
 });
 
+const sendEmail = (targetEmail) => {
+  const message = {
+    from: `${EMAIL_USER}`,
+    to: targetEmail,
+    subject: 'New Comment on Pet-Detective',
+    text: 'You have a new message on your post on Pet-Detective',
+    html,
+  };
+  transporter.sendMail(message);
+};
+
 const getComments = (res, posts) => {
   const postIdList = posts.map(e => e.id).join(',');
   connection.query(`select * from comments where postId in (${postIdList}) `, (error, comments) => {
@@ -107,11 +139,14 @@ const getComments = (res, posts) => {
 };
 
 app.post('/comments', (req, res) => {
-  const { comment, senderEmail, postId, time, name } = req.body;
+  const { comment, senderEmail, postId, time, name, postEmail } = req.body;
   connection.query(`insert into comments (postId, name, message, time, senderEmail) values ('${postId}', '${name}', '${comment}', '${time}', '${senderEmail}')`, (err) => {
     if (err) {
       console.error(err);
     } else {
+      if (EMAIL_USER.length) {
+        sendEmail(postEmail);
+      }
       connection.query(`select * from comments where postId = ${postId}`, (error, comments) => {
         if (error) {
           console.error(error);
