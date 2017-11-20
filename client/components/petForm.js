@@ -31,7 +31,12 @@ angular.module('pet-detective')
       this.createMap();
       // return this.bulletinData;
     };
-    this.fetchSearchResults = function (searchLocation, searchAnimalType, searchTags, searchDistance, initialSearch) {
+    this.fetchSearchResults = function (
+      searchLocation,
+      searchAnimalType,
+      searchTags,
+      searchDistance,
+      initialSearch) {
       if (searchLocation) {
         this.noResultText = false;
         return $http({
@@ -47,7 +52,10 @@ angular.module('pet-detective')
           .then(({ data }) => {
             if (data.length) {
               this.bulletinData = data;
+              const [lat, long] = this.bulletinData[0].latlong.split(',');
+              const latLng = new google.maps.LatLng(lat, long);
               this.removeMarkers();
+              this.mymapdetail.setCenter(latLng);
               this.placeMarkers();
             } else {
               this.noResultText = true;
@@ -202,7 +210,7 @@ angular.module('pet-detective')
         postEmail,
       };
       $http.post('/comments', data)
-        .then((comments) => {
+        .then(() => {
           this.bulletinData[bullIndex].comments = comments;
           this.commentText = '';
         });

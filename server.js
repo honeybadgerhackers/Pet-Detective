@@ -1,4 +1,6 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const mysql = require('mysql');
 require('dotenv').config();
 const bodyParser = require('body-parser');
@@ -8,7 +10,15 @@ const utilities = require('./utils/searchUtils');
 const { html } = require('./emailTemplate');
 
 const app = express();
-const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY, EMAIL_USER, EMAIL_PASS, OAUTH_ID } = process.env;
+const { PORT,
+  DB,
+  DB_USER,
+  DB_PASSWORD,
+  GOOGLE_API_KEY,
+  EMAIL_USER,
+  EMAIL_PASS,
+  OAUTH_ID,
+  MY_SECRET } = process.env;
 const nodemailer = require('nodemailer');
 
 const poolConfig = {
@@ -27,9 +37,12 @@ transporter.verify((err) => {
   if (err) {
     console.error(err);
   } else {
+    /* eslint-disable */
     console.info('SMTP CONNECTED');
+    /* eslint-enable */
   }
 });
+
 
 const config = {
   host: DB,
@@ -38,12 +51,7 @@ const config = {
   database: 'petdetective',
 };
 
-const connection = mysql.createConnection({
-  host: DB,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: 'petdetective',
-});
+const connection = mysql.createConnection(config);
 
 const auth = new GoogleAuth();
 const client = new auth.OAuth2(OAUTH_ID, '', '');
@@ -55,10 +63,6 @@ app.use(bodyParser.json());
 connection.connect((err) => {
   console.warn(err || `succesfully connected to DB ${DB}`);
 });
-
-/* eslint-disable */
-app.listen(PORT, () => console.log('listening on', PORT)); 
-/* eslint-enable */
 
 const userInfo = {
   currentUser: '',
@@ -159,7 +163,7 @@ app.post('/search', (req, res) => {
   if (!searchDistance) {
     connection.query(
       `select * from petpost where 
-      address like '%${searchLocation}%'`,
+      address like '%${searchLocation}% ORDER BY id'`,
       (err, rows) => {
         if (err) {
           res.send(err);
@@ -170,7 +174,6 @@ app.post('/search', (req, res) => {
   } else {
     utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
-        // console.log(result);
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
         utilities.radiusSearch(lat, lng, searchDistance, (error, searchResults) => {
           if (error) {
@@ -222,3 +225,6 @@ app.post('/deletePost', (req, res) => {
   });
 });
 
+/* eslint-disable */
+app.listen(PORT, () => console.log('listening on', PORT)); 
+/* eslint-enable */
