@@ -8,7 +8,7 @@ const utilities = require('./utils/searchUtils');
 const { html } = require('./emailTemplate');
 
 const app = express();
-const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY, EMAIL_USER, EMAIL_PASS } = process.env;
+const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY, EMAIL_USER, EMAIL_PASS, OAUTH_ID } = process.env;
 const nodemailer = require('nodemailer');
 
 const poolConfig = {
@@ -38,20 +38,22 @@ const config = {
   database: 'petdetective',
 };
 
-const connection = mysql.createConnection(config);
+const connection = mysql.createConnection({
+  host: DB,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: 'petdetective',
+});
 
 const auth = new GoogleAuth();
-const client = new auth.OAuth2('1036579880288-7vaoh4gg8d0hhapkcuummk2pvqpu1sf0.apps.googleusercontent.com', '', '');
+const client = new auth.OAuth2(OAUTH_ID, '', '');
 
-// console.log(auth);
 app.use(express.static('client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to database ...', err);
-  }
+  console.warn(err || `succesfully connected to DB ${DB}`);
 });
 
 /* eslint-disable */
@@ -91,7 +93,7 @@ app.get('/bulletin', (req, res) => {
 });
 
 app.post('/bulletin', (req, res) => {
-  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err, /* rows, fields */) {
+  connection.query(`insert into petpost (lostOrFound, type, styles, address, message, date, latlong, user, userpic, petPic) values ('${req.body.lostOrFound}', '${req.body.type}','${req.body.styles}', '${req.body.address}', '${req.body.message}', '${req.body.date}', '${req.body.latlong}', '${req.body.user}', '${req.body.userpic}', '${req.body.petPic}')`, function (err) {
     if (err) {
       console.error(err);
     }
@@ -153,11 +155,11 @@ app.post('/comments', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const { searchField: searchText, distance } = req.body;
-  if (!distance) {
+  const { searchLocation, searchDistance, searchAnimalType, searchTags } = req.body;
+  if (!searchDistance) {
     connection.query(
       `select * from petpost where 
-      address like '%${searchText}%'`,
+      address like '%${searchLocation}%'`,
       (err, rows) => {
         if (err) {
           res.send(err);
@@ -166,10 +168,11 @@ app.post('/search', (req, res) => {
         }
       });
   } else {
-    utilities.getCoords(searchText, GOOGLE_API_KEY)
+    utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
+        // console.log(result);
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-        utilities.radiusSearch(lat, lng, distance, (error, searchResults) => {
+        utilities.radiusSearch(lat, lng, searchDistance, (error, searchResults) => {
           if (error) {
             res.send(error);
           } else {
@@ -183,7 +186,7 @@ app.post('/search', (req, res) => {
 app.post('/tokensignin', function (req, res) {
   client.verifyIdToken(
     req.body.idtoken,
-    '673527265143-l8gvqn8e0qcm4o23nf914sd9hp0tj82c.apps.googleusercontent.com',
+    OAUTH_ID,
     // Or, if multiple clients access the backend:
     // [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
     function (e, login) {
@@ -192,7 +195,7 @@ app.post('/tokensignin', function (req, res) {
       userInfo.currentUser = payload.email;
       userInfo.photo = payload.picture;
       if (payload) {
-        token = jwt.sign(payload, process.env.MY_SECRET);
+        token = jwt.sign(payload, MY_SECRET);
       }
       connection.query(`select * from users where email = '${payload.email}'`, (err, data) => {
         if (!data.length) {
