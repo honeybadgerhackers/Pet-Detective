@@ -11,6 +11,7 @@ const utilities = require('./utils/searchUtils');
 const app = express();
 const { PORT, DB, DB_USER, DB_PASSWORD, GOOGLE_API_KEY } = process.env;
 
+
 const config = {
   host: DB,
   user: DB_USER,
@@ -19,8 +20,9 @@ const config = {
 };
 
 const httpsOptions = {
-  key: fs.readFileSync('./key.pem'),
-  cert: fs.readFileSync('./cert.pem'),
+  key: fs.readFileSync('key.pem', 'utf8'),
+  cert: fs.readFileSync('cert.pem', 'utf8'),
+  passphrase: '6223',
 };
 
 const connection = mysql.createConnection(config);
@@ -51,6 +53,7 @@ app.get('/bulletin', (req, res) => {
       res.send(err);
     } else {
       connection.query('select * from comments', (error, comments) => {
+        console.log(comments);
         const objectRows = comments.reduce((prev, current) => {
           if (!prev[current.postId]) {
             prev[current.postId] = [];
@@ -188,9 +191,9 @@ app.post('/deletePost', (req, res) => {
 });
 
 /* eslint-disable */
-const server = https.createServer(httpsOptions, app)
-  .listen(PORT, () => {
-    console.log('listening on', PORT)
+app.listen(PORT, () => console.log('listening on', PORT)); 
+https.createServer(httpsOptions, app)
+  .listen(3000, () => {
+    console.log('listening on', 443)
   })
-// app.listen(PORT, () => console.log('listening on', PORT)); 
 /* eslint-enable */
