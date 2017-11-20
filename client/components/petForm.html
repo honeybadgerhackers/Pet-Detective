@@ -334,7 +334,7 @@
   </div>
   <div class="row">
     <div class="container">
-      <div class="row">
+      <div class="row" style="margin-left: 15px;">
         <div class="col-md-6" dir-paginate="(bullIndex,bulletin) in ctrl.bulletinData | orderBy:'$index':true | itemsPerPage: 10" style="background-color:lightgray;color: white; min-height: 275px; border: 3px solid #008000; padding: 0px; position: relative">
           <div ng-if="bulletin.user === ctrl.email">
             <button style="float: right; padding: 2% 1%" type="button" class="close" aria-label="Close" ng-click="ctrl.deletePost(bulletin)">
