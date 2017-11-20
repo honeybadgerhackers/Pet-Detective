@@ -162,7 +162,7 @@ app.post('/comments', (req, res) => {
 app.post('/search', (req, res) => {
   const { searchLocation, searchDistance, searchAnimalType } = req.body;
   let { searchTags } = req.body;
-  if (!searchTags) {
+  if (!searchTags || Array.isArray(searchTags) && searchTags.length === 0) {
     searchTags = [{ text: '' }];
   }
   console.log(searchTags);
