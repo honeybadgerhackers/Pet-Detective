@@ -11,6 +11,3 @@ app.yaml
 petdetective.pem
 .ideas
 petdetective.pem
-cert.pem
-key.pem
-keytmp.pem
