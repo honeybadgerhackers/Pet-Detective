@@ -163,10 +163,12 @@ app.post('/search', (req, res) => {
   const { searchLocation, searchDistance, searchAnimalType } = req.body;
   let { searchTags } = req.body;
   if (!searchTags || Array.isArray(searchTags) && searchTags.length === 0) {
-    searchTags = [{ text: '' }];
+    searchTags = [{ text: null }];
   }
-  console.log(searchTags);
-  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' OR type LIKE '%${searchAnimalType}%') ORDER BY id;`;
+  const tagList = `'${searchTags.map(e => e.text).join("','")}'`;
+  console.log(tagList, searchAnimalType);
+
+  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' AND type LIKE '%${searchAnimalType}%') ORDER BY id;`;
   if (!searchDistance) {
     connection.query(
       searchQuery,
