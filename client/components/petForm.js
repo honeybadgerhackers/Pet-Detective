@@ -114,8 +114,8 @@ angular.module('pet-detective')
     this.loadTags = () => $http.get('./searchTags/petTags.json');
 
     this.addMarker = function ({ id, lostOrFound, lat, long }) {
-      const blueMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF');
-      const redMarker = new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
+      const blueMarker = new google.maps.MarkerImage('https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|0000FF');
+      const redMarker = new google.maps.MarkerImage('https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000');
 
       const marker = new google.maps.Marker({
         map: this.mymapdetail,

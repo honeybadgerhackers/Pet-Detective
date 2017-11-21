@@ -117,7 +117,8 @@ const sendEmail = (targetEmail) => {
 };
 
 const getComments = (res, posts) => {
-  const postIdList = posts.map(e => e.id).join(',');
+  const postIdList = `'${posts.map(e => e.id).join("','")}'`;
+  console.log(postIdList);
   connection.query(`select * from comments where postId in (${postIdList}) `, (error, comments) => {
     if (error) {
       console.error(error);
@@ -159,11 +160,20 @@ app.post('/comments', (req, res) => {
 });
 
 app.post('/search', (req, res) => {
-  const { searchLocation, searchDistance, searchAnimalType, searchTags } = req.body;
+  const { searchLocation, searchDistance } = req.body;
+  let { searchTags, searchAnimalType } = req.body;
+  if (!searchTags || Array.isArray(searchTags) && searchTags.length === 0) {
+    searchTags = [{ text: '' }];
+  }
+  if (!searchAnimalType) {
+    searchAnimalType = '';
+  }
+  const tagList = `'%${searchTags.map(e => e.text).join("%' OR styles LIKE '%")}%'`;
+  console.log(tagList);
+  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND type LIKE '%${searchAnimalType}%' AND (styles LIKE ${tagList}) ORDER BY id;`;
   if (!searchDistance) {
     connection.query(
-      `select * from petpost where 
-      address like '%${searchLocation}% ORDER BY id'`,
+      searchQuery,
       (err, rows) => {
         if (err) {
           res.send(err);
@@ -175,7 +185,7 @@ app.post('/search', (req, res) => {
     utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-        utilities.radiusSearch(lat, lng, searchDistance, (error, searchResults) => {
+        utilities.radiusSearch(lat, lng, searchDistance, searchAnimalType, tagList, (error, searchResults) => {
           if (error) {
             res.send(error);
           } else {
