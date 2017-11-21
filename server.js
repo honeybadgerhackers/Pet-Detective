@@ -165,12 +165,12 @@ app.post('/search', (req, res) => {
   if (!searchTags || Array.isArray(searchTags) && searchTags.length === 0) {
     searchTags = [{ text: '' }];
   }
-  if (searchAnimalType === null) {
+  if (!searchAnimalType) {
     searchAnimalType = '';
   }
-  const tagList = `'${searchTags.map(e => e.text).join("','")}'`;
-
-  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND (styles LIKE '%${searchTags[0].text}%' AND type LIKE '%${searchAnimalType}%') ORDER BY id;`;
+  const tagList = `'%${searchTags.map(e => e.text).join("%' OR styles LIKE '%")}%'`;
+  console.log(tagList);
+  const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND type LIKE '%${searchAnimalType}%' AND (styles LIKE ${tagList}) ORDER BY id;`;
   if (!searchDistance) {
     connection.query(
       searchQuery,
@@ -185,7 +185,7 @@ app.post('/search', (req, res) => {
     utilities.getCoords(searchLocation, GOOGLE_API_KEY)
       .then((result) => {
         const { results: [{ geometry: { location: { lat, lng } } }] } = JSON.parse(result);
-        utilities.radiusSearch(lat, lng, searchDistance, searchTags, searchAnimalType, (error, searchResults) => {
+        utilities.radiusSearch(lat, lng, searchDistance, searchAnimalType, tagList, (error, searchResults) => {
           if (error) {
             res.send(error);
           } else {
