@@ -118,7 +118,6 @@ const sendEmail = (targetEmail) => {
 
 const getComments = (res, posts) => {
   const postIdList = `'${posts.map(e => e.id).join("','")}'`;
-  console.log(postIdList);
   connection.query(`select * from comments where postId in (${postIdList}) `, (error, comments) => {
     if (error) {
       console.error(error);
@@ -169,7 +168,6 @@ app.post('/search', (req, res) => {
     searchAnimalType = '';
   }
   const tagList = `'%${searchTags.map(e => e.text).join("%' OR styles LIKE '%")}%'`;
-  console.log(tagList);
   const searchQuery = `SELECT * FROM petpost WHERE address LIKE '%${searchLocation}%' AND type LIKE '%${searchAnimalType}%' AND (styles LIKE ${tagList}) ORDER BY id;`;
   if (!searchDistance) {
     connection.query(

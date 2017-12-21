@@ -14,14 +14,11 @@ module.exports = {
   },
 
   radiusSearch(lat, lng, dist, searchAnimalType, tagList, callback, connection) {
-    console.log(`SELECT *, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', -1) ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) ) ) AS distance FROM petpost HAVING (distance < ${dist}) AND type LIKE '%${searchAnimalType}%' AND (styles LIKE ${tagList}) ORDER BY id;`)
     connection.query(`SELECT *, ( 3959 * acos( cos( radians(${lat}) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) * cos( radians( SUBSTRING_INDEX(latlong, ',', -1) ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( SUBSTRING_INDEX(latlong, ',', 1) ) ) ) ) AS distance FROM petpost HAVING (distance < ${dist}) AND type LIKE '%${searchAnimalType}%' AND (styles LIKE ${tagList}) ORDER BY id;`, (err, rows) => {
       if (err) {
         callback(err, null);
-        console.log(err);
       } else {
         callback(null, rows);
-        console.log(rows);
       }
     });
   },
