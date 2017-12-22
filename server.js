@@ -209,7 +209,7 @@ app.post('/tokensignin', function (req, res) {
         token = jwt.sign(payload, MY_SECRET);
       }
       connection.query(`select * from users where email = '${payload.email}'`, (err, data) => {
-        if (!data.length) {
+        if (!data) {
           connection.query(`insert into users (email, picture, first_name, last_name) values ('${payload.email}','${payload.picture}','${payload.given_name}','${payload.family_name}')`);
           res.status(200).send(token);
         } else {

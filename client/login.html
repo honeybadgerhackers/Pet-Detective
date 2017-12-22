@@ -1,60 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-signin-client_id" content="109228043363-b4h794v27k5vgu1rqsllce6rm5278rqr.apps.googleusercontent.com">
     <title>Pet Detective</title>
-    <!-- <link href="styles.css" rel="stylesheet"> -->
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Zilla+Slab" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-<style>
-  body {
-    background-color: green;
-  }
-  .rowLogin {
-    border-style: solid;
-    border-width: medium;
-    border-color: white;
-  }
-</style>
 
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Zilla+Slab" rel="stylesheet">
+    <!-- Plugin CSS -->
+    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="css/freelancer.min.css" rel="stylesheet">
 
   </head>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-          </button>
-        <a class="navbar-brand" href="#">
-          <div style="font-size: 35px; margin-left: 17%; color: green">petdetective</div>
-          <img alt="Brand" style="width: 20%; margin-top: -30px" src="https://www.shareicon.net/data/256x256/2015/10/10/653854_print_512x512.png">
-        </a>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Pet Detective</a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Images</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">About</a>
+            </li>
+            <li class="nav-item mx-0 mx-lg-1">
+              <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#login">Login</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
 
-      <!--<div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
+    <!-- Header -->
+    <header class="masthead bg-primary text-white text-center">
+      <div class="container">
+        <img class="img-fluid mb-5 d-block mx-auto" src="https://www.shareicon.net/data/512x512/2015/10/10/653854_print_512x512.png" alt="">
+        <h1 class="text-uppercase mb-0">Pet Detective</h1>
+        <hr class="star-light">
+        <h2 class="font-weight-light mb-0">A lost and found for your pets</h2>
+      </div>
+    </header>
 
-      <li class="active"><div class="g-signin2" type="submit" data-theme="dark"></div></li>
-      <li><a href="#" onclick="signOut();">Sign out</a></li>
-      </ul>
-      </div> -->
-    </div>
-  </nav>
-
-
-<body>
-
-    <div class="container-fluid">
+    <!-- Portfolio Grid Section -->
+    <section class="portfolio" id="portfolio">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Images</h2>
+        <hr class="star-dark mb-5">
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-1">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/portfolio/login.png" alt="">
+            </a>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-2">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/portfolio/insertScreen.png" alt="">
+            </a>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <a class="portfolio-item d-block mx-auto" href="#portfolio-modal-3">
+              <div class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+                <div class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+                  <i class="fa fa-search-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/portfolio/comments.png" alt="">
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="bg-primary text-white mb-0" id="about">
+      <div class="container">
+        <h2 class="text-center text-uppercase text-white">About</h2>
+        <hr class="star-light mb-5">
+        <div class="row">
+          <div class="col-lg-10 ml-auto">
+            <p class="lead">Pet Detective is a posting board for lost and found pets. It displays the posts near you and has tagged searches for quickly locating any related posts</p>
+          </div>
+          <!-- <div class="col-lg-4 mr-auto">
+            <p class="lead">Whether you're a student looking to showcase your work, a professional looking to attract clients, or a graphic artist looking to share your projects, this template is the perfect starting point!</p>
+          </div> -->
+        </div>
+        <div class="text-center mt-4">
+          <!-- <a class="btn btn-xl btn-outline-light" href="https://petdetective.me/">
+            <i class="fa fa-download mr-2"></i>
+            Take me to Pet Detective
+          </a> -->
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="container-fluid" id="login">
         <div class="row">
             <div class="col-md-44"></div>
                 <div style="max-width:80%; max-height: 500px; background-image: url('https://images.pexels.com/photos/162349/dog-hybrid-animal-lying-162349.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb');background-position: center;background-repeat: no-repeat;background-size: cover; border-radius: 10px; padding: 50px; box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);" class="container-fluid">
@@ -63,6 +134,7 @@
                                     <center><h1 style="font-family: 'Zilla Slab', serif;"><b>PET DETECTIVE!</b></h1></center>
                                     <center><h3 style="padding: 10px;font-family: 'Roboto', sans-serif;">Found a pet? Lost a pet? We can help!</h3></center>
                                     <center><h3 style="font-family: 'Roboto', sans-serif;">Login to get started!<h3></center>
+                                      <center><div class="g-signin2" data-onsuccess="onSignIn" data-theme="light" data-width="400" data-height="100" data-longtitle="true" style="position:relative; opacity: 0.9"></div></center>
                   </div>
                   <div class="row"></div>
                     <div class="container-fluid">
@@ -70,7 +142,6 @@
                             <!--<div style="height: 500px" class="col-lg-12">-->
                           <span class="page-header">
                             <center><div class="col-md-4" style="padding: 0px;width: 100%">
-                              <div class="g-signin2" type="submit" data-onsuccess="onSignIn" data-theme="light" style="position:relative"></div>
                               <script>
                                 function onSignIn(googleUser) {
                                   // Useful data for your client-side scripts:
@@ -104,6 +175,114 @@
             <div class="col-md-4">
           </div>
       </div>
-  </div>
+    </div>
+  </section>
+
+    <div class="copyright py-4 text-center text-white">
+      <div class="container">
+          <small>Check out our repo on Github</small>
+          <a class="btn btn-outline-light btn-social text-center rounded-circle" href="https://github.com/honeybadgerhackers/Pet-Detective">
+              <i class="fa fa-fw fa-github"></i>
+          </a>
+      </div>
+    </div>
+    
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-to-top d-lg-none position-fixed ">
+      <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+        <i class="fa fa-chevron-up"></i>
+      </a>
+    </div>
+
+    <!-- Portfolio Modals -->
+
+    <!-- Portfolio Modal 1 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-1">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Login Screen</h2>
+              <hr class="star-dark mb-5">
+              <img class="img-fluid mb-5" src="img/portfolio/login.png" alt="">
+              <p class="mb-5">Pet Detective uses your existing Google account for logging in, meaning you won't have to go through creating a new account, you can just login and get posting!</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Modal 2 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-2">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Making a post</h2>
+              <hr class="star-dark mb-5">
+              <img class="img-fluid mb-5" src="img/portfolio/insertScreen.png" alt="">
+              <p class="mb-5">Making a post is simple, you can just click the lost or found button which will bring up the post creation screen. Here you can choose if you lost or found a pet, the type of the pet, where it was last seen and some details about it. You can even upload a picture of your pet</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio Modal 3 -->
+    <div class="portfolio-modal mfp-hide" id="portfolio-modal-3">
+      <div class="portfolio-modal-dialog bg-white">
+        <a class="close-button d-none d-md-block portfolio-modal-dismiss" href="#">
+          <i class="fa fa-3x fa-times"></i>
+        </a>
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h2 class="text-secondary text-uppercase mb-0">Project Name</h2>
+              <hr class="star-dark mb-5">
+              <img class="img-fluid mb-5" src="img/portfolio/comments.png" alt="">
+              <p class="mb-5">The posts near you are displayed below. Here you can see where they were reported on the map and write comments to the post creator. The original poster will be messaged regarding any posts so they can keep up to date with any status updates.</p>
+              <a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss" href="#">
+                <i class="fa fa-close"></i>
+                Close</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script> -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/freelancer.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
   </body>
+
 </html>
